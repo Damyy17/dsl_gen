@@ -34,6 +34,7 @@ public class Main {
         GeneticsGrammarParser parser = new GeneticsGrammarParser(new CommonTokenStream(lexer));
 
         ParseTree tree = parser.program();
+        System.out.println(tree.toStringTree(parser));
         GeneticsGrammarBaseVisitor<String> visitor = new GeneticsGrammarBaseVisitor<>();
         visitor.visit(tree);
     }

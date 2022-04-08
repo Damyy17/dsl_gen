@@ -15,7 +15,7 @@ set genotype parent2 = AaBb;
 
 find genotype bb;
 
-F1 = cross(parent1, parent2);
+cross parent1 * parent2;
 
 print F1 square;
 print F1 frequency bb;
