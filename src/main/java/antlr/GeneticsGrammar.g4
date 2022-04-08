@@ -28,7 +28,7 @@ TRUE: 'true';
 FALSE: 'false';
 AND: 'and';
 OR: 'or';
-CROSS_OPERATION: 'x';
+CROSS_OPERATION: '*';
 
 //types
 GENES: 'genes';
@@ -92,7 +92,7 @@ computations: FIND  field  id ';'
               | PRED  id+ ';'
               | ESTIMATE  id  number ';'
               | ESTIMATE field id alpha+ ';'
-              | CROSS id '*' id ';' ;
+              | CROSS id CROSS_OPERATION id ;
 
 flow_structure: IF  condition  THEN  statements+?  ELSE  statements  END ';'
                 | condition '?' condition ':' statements ';'
