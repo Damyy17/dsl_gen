@@ -92,7 +92,7 @@ computations: FIND  field  id ';'
               | PRED  id+ ';'
               | ESTIMATE  id  number ';'
               | ESTIMATE field id alpha+ ';'
-              | CROSS id '*' id ';' ;
+              | CROSS id '*' id ;
 
 flow_structure: IF  condition  THEN  statements+?  ELSE  statements  END ';'
                 | condition '?' condition ':' statements ';'

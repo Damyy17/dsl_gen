@@ -25,7 +25,7 @@ public class Main {
                 "\n" +
                 "find genotype bb;\n" +
                 "\n" +
-                "F1 = cross(parent1, parent2);\n" +
+                "set genotype F1 = cross parent1 * parent2 ;\n" +
                 "\n" +
                 "print F1 square;\n" +
                 "print F1 frequency bb;";
