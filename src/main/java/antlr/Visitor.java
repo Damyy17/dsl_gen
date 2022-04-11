@@ -1,8 +1,11 @@
 package antlr;
 
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
@@ -15,6 +18,12 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
 
     @Override
     public T visitDeclaration(GeneticsGrammarParser.DeclarationContext ctx) {
+        List<String> child = new ArrayList<String>();
+        for (ParseTree e: ctx.children) {
+            child.add(e.getText());
+        }
+
+        System.out.println(child);
         return super.visitDeclaration(ctx);
     }
 

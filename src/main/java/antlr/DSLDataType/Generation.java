@@ -56,7 +56,7 @@ public class Generation implements IDataType{
     public void cross(Parent p1, Parent p2){
         Parent[] p= {p1, p2};
         setParents(p);
-        generateGamets();
+        generateGametes();
 
     }
 

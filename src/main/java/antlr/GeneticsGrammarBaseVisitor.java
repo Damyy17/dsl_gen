@@ -139,15 +139,15 @@ public class GeneticsGrammarBaseVisitor<T> extends AbstractParseTreeVisitor<T> i
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitIo(GeneticsGrammarParser.IoContext ctx) {
-		try{
-		System.out.println(ctx.children);
-		}catch (Exception e){
-			System.out.println("None");
-		}
-		String x = ctx.children.toString();
-		if (x.contains("print")){
-			System.out.println(ctx.PRINT());
-		}
+//		try{
+//		System.out.println(ctx.children);
+//		}catch (Exception e){
+//			System.out.println("None");
+//		}
+//		String x = ctx.children.toString();
+//		if (x.contains("print")){
+//			System.out.println(ctx.PRINT());
+//		}
 
 		return visitChildren(ctx); }
 }

@@ -36,7 +36,7 @@ public class Main {
 
         ParseTree tree = parser.program();
         System.out.println(tree.toStringTree(parser));
-        GeneticsGrammarBaseVisitor<String> visitor = new GeneticsGrammarBaseVisitor<>();
+        GeneticsGrammarBaseVisitor<String> visitor = new Visitor<>();
         visitor.visit(tree);
     }
 }
