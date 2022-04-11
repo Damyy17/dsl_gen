@@ -1,5 +1,9 @@
 package antlr.DSLDataType;
 
+import antlr.DSLExceptions.GrammarExceptions;
+import antlr.DSLExceptions.InaccessibleFieldException;
+import antlr.DSLExceptions.NonexistentFieldException;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,15 +73,25 @@ public class Gene implements IDataType{
 
     //Sets the value of the specific field or throws an NonexistentFieldException
     @Override
-    public void setValue(String field, String value) {
-        if (field.equals("location")) setLocation(value);
-        //For setting label splits the value in 2 based on first ' ' character, left side (allele) is key,
+    public void setValue(String field, String value) throws GrammarExceptions {
+        switch (field) {
+            case "location":
+                setLocation(value);
+                break;
+            //For setting label splits the value in 2 based on first ' ' character, left side (allele) is key,
             // right side (phenotype) is the value in the map
-        else if (field.equals("label")){
-            String[] kv = value.split(" ", 2);
-            setLabels(kv[0], kv[1]);
+            case "label":
+                String[] kv = value.split(" ", 2);
+                setLabels(kv[0], kv[1]);
+                break;
+            case "dom":
+                setDominantGene(value);
+                break;
+            case "rec":
+                setRecessiveGene(value);
+                break;
+            default:
+                throw new NonexistentFieldException("NonexistentFieldException. No such field " + field + " in Gene.");
         }
-        else if (field.equals("dom")) setDominantGene(value);
-        else if (field.equals("rec")) setRecessiveGene(value);
     }
 }

@@ -1,6 +1,6 @@
 package antlr.DSLExceptions;
 
-abstract class GrammarExceptions extends Exception {
+public class GrammarExceptions extends Exception {
 
     public GrammarExceptions(){
         super();

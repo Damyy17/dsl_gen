@@ -1,4 +1,6 @@
 package antlr.DSLDataType;
+import antlr.DSLExceptions.*;
+
 import java.lang.Character;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +25,9 @@ public class Parent implements IDataType{
 
     //Method to check if the Genotype is properly declared
     //Instead of boolean, will throw the proper errors
-    private boolean isProperGenotype(String genotype){
+    private void isProperGenotype (String genotype) throws GrammarExceptions {
         //Check if length accounts for 2 allele of each gene type declared
-        if (genotype.length() != genes.length * 2) return false; //Should throw IncorrectGenotypeFormat
+        if (genotype.length() != genes.length * 2) throw new IncorrectGenotypeFormatException("IncorrectGenotypeFormatException. Illegal Genotype length for " + genotype); //Should throw IncorrectGenotypeFormat
 
         //Creates list of all possible Allele
         List<String> possibleGenes = new ArrayList<String>();
@@ -35,23 +37,25 @@ public class Parent implements IDataType{
         for (int i = 0; i < genotype.length(); i++) {
             //Checks if each allele in parent Genotype is in the list of allele
             if (!possibleGenes.contains(String.valueOf(genotype.charAt(i)))){
-                return false; //Should Throw NonSpecifiedAllele
+                throw new NonSpecifiedAlleleException("NonSpecifiedAlleleException. " + String.valueOf(genotype.charAt(i)) + " is an nonspecified allele."); //Should Throw NonSpecifiedAllele
             }
             //Checks if each 2 characters are paired properly like Aa or AA
             if (i % 2 == 1){
                 if (Character.toUpperCase(genotype.charAt(i - 1)) != Character.toUpperCase(genotype.charAt(i)))
-                    return false; //Should Throw Incorrect Genotype Format
+                    throw new IncorrectGenotypeFormatException("IncorrectGenotypeFormatException. Allele on a gene should be adjacent"); //Should Throw Incorrect Genotype Format
             }
         }
-        return true;
     }
 
     public void setGenotype(String genotype) {
-
-        if (isProperGenotype(genotype)) {
+        try{
+            isProperGenotype(genotype);
             this.genotype = genotype;
             setPhenotype();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
+
     }
 
     public String getPhenotype() {
@@ -91,11 +95,19 @@ public class Parent implements IDataType{
 
     //Sets the value of the specific field or throws an NonexistentFieldException/InaccesibleField Exception
     @Override
-    public void setValue(String field, String value) {
-        if (field.equals("genotype")) setGenotype(value);
-        else if (field.equals("sex")) setSex(value);
-        else if (field.equals("phenotype")) return; //Throws Inaccesible
-        else return; //Throws Nonexistent
+    public void setValue(String field, String value) throws GrammarExceptions {
+        switch (field) {
+            case "genotype":
+                setGenotype(value);
+                break;
+            case "sex":
+                setSex(value);
+                break;
+            case "phenotype":
+                throw new InaccessibleFieldException("InaccessibleFieldException. Field " + field + " cannot be accessed directly in Parent."); //Throws Inaccesible
+            default:
+                throw new NonexistentFieldException("NonexistentFieldException. No such field " + field + " in Parent."); //Throws Nonexistent
+        }
 
     }
 
