@@ -99,4 +99,12 @@ public class Parent implements IDataType{
 
     }
 
+    public boolean equals(Object o){
+        if (o == this) return true;
+        if (!(o instanceof Parent)) return false;
+        Parent obj = (Parent) o;
+
+        return this.genotype.equals(obj.genotype);
+    };
+
 }
