@@ -73,7 +73,9 @@ public class GeneticsGrammarBaseVisitor<T> extends AbstractParseTreeVisitor<T> i
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAlpha(GeneticsGrammarParser.AlphaContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAlpha(GeneticsGrammarParser.AlphaContext ctx) {
+		//System.out.println(ctx.children);
+		return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -136,5 +138,16 @@ public class GeneticsGrammarBaseVisitor<T> extends AbstractParseTreeVisitor<T> i
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitIo(GeneticsGrammarParser.IoContext ctx) { return visitChildren(ctx); }
+	@Override public T visitIo(GeneticsGrammarParser.IoContext ctx) {
+		try{
+		System.out.println(ctx.children);
+		}catch (Exception e){
+			System.out.println("None");
+		}
+		String x = ctx.children.toString();
+		if (x.contains("print")){
+			System.out.println(ctx.PRINT());
+		}
+
+		return visitChildren(ctx); }
 }
