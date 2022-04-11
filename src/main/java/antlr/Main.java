@@ -1,5 +1,6 @@
 package antlr;
 
+import antlr.DSLExceptions.NonexistentTypeException;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -7,7 +8,7 @@ import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, Exception {
         String inputCode = "genes a, b;\n" +
                 "parents parent1, parent2;\n" +
                 "generation F1;\n" +
