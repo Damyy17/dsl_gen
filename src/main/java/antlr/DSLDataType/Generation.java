@@ -102,13 +102,25 @@ public class Generation implements IDataType{
         }
     }
 
-    public int estimateFrequency(String segment){
+    public int estimateFreq(String segment){
         if (genotypeFrequency.isEmpty()) estimateFreq();
         int i = 0;
         for (String gene: genotypeFrequency.keySet()) {
             if (gene.contains(segment)) i = i + genotypeFrequency.get(gene);
         }
         return i;
+    }
+
+    public Map<String, Integer> estimateFreq(int population){
+        if (genotypeFrequency.isEmpty()) estimateFreq();
+        int total = children.size();
+        Map<String, Integer> popfreq = new HashMap<>();
+        for (String gene: genotypeFrequency.keySet()) {
+            int i = genotypeFrequency.get(gene);
+            int pf = (int) Math.floor((double) i/total * population);
+            popfreq.put(gene, pf);
+        }
+        return popfreq;
     }
 
     private void createSquare(List<String> parent1, List<String> parent2){
