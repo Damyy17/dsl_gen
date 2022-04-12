@@ -1,14 +1,14 @@
 package antlr;
 
 import antlr.DSLDataType.*;
-import antlr.DSLExceptions.GrammarExceptions;
-import antlr.DSLExceptions.NonexistentTypeException;
+import antlr.DSLExceptions.ReservedKeywordException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 
 import java.util.*;
 
 public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
+    ArrayList<String> noDuplicateVariables = new ArrayList<>();
     Map<String, Object> variables = new HashMap<>();
     static final String[] keywords = {"genes", "parents", "generation", "set", "dom", "phenotype", "codominance", "location",
     "label", "genotype", "frequency", "square", "find", "cross", "pred", "estimate", "if", "then",
@@ -52,9 +52,9 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                         value = new DSLString();
                         break;
                 }
-                if (!Arrays.asList(keywords).contains(s)) {
+                if (!Arrays.asList(keywords).contains(s))
                     variables.put(s, value);
-                }
+                else throw new ReservedKeywordException("Reserved Keyword Exception is occurred!");
             }
         }
 

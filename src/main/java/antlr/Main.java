@@ -38,6 +38,5 @@ public class Main {
         System.out.println(tree.toStringTree(parser));
         GeneticsGrammarBaseVisitor<String> visitor = new Visitor<>();
         visitor.visit(tree);
-        visitor.visitDeclaration(parser.declaration());
     }
 }
