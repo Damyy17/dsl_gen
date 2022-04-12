@@ -94,14 +94,15 @@ public class Generation implements IDataType{
     }
 
     public void createSquare(List<String> parent1, List<String> parent2){
-        this.square = new String[parent1.size()][parent2.size()];
-        for (int i = 0; i < parent1.size(); i++) {
-            for (int j = 0; j < parent2.size(); j++) {
+        this.square = new String[parent1.size() + 1][parent2.size() + 1];
+
+        for (int i = 0; i <= parent1.size(); i++) {
+            for (int j = 0; j <= parent2.size(); j++) {
                 if (i == 0 && j == 0) this.square[0][0] = "F/M";
-                else if (i == 0) this.square[i][j] = parent2.get(j);
-                else if (j == 0) this.square[i][j] = parent1.get(i);
+                else if (i == 0) this.square[i][j] = parent2.get(j - 1);
+                else if (j == 0) this.square[i][j] = parent1.get(i - 1);
                 else{
-                    this.square[i][j] = makeChild(parent1.get(i), parent2.get(j));
+                    this.square[i][j] = makeChild(parent1.get(i - 1), parent2.get(j - 1));
                 }
             }
         }
