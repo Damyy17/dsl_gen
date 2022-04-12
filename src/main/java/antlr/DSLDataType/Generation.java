@@ -2,16 +2,18 @@ package antlr.DSLDataType;
 
 import antlr.DSLExceptions.GrammarExceptions;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import java.lang.String;
+
 public class Generation implements IDataType{
     private Parent [] parents;
-    private Parent[] children;
+    private List<Parent> children = new ArrayList<>();
     private String[][] square;
-    private Map<String, Integer> genotypeFrequency;
+    private Map<String, Integer> genotypeFrequency = new HashMap<>();
 
     public Parent[] getParents() {
         return parents;
@@ -21,42 +23,96 @@ public class Generation implements IDataType{
         this.parents = parents;
     }
 
-    public Parent[] getChildren() {
-        return children;
-    }
-
-    public void setChildren(Parent[] children) {
-        this.children = children;
-    }
+    public List<Parent> getChildren() {return children;}
 
     public String[][] getSquare() {
         return square;
-    }
-
-    public void setSquare(String[][] square) {
-        this.square = square;
     }
 
     public Map<String, Integer> getGenotypeFrequency() {
         return genotypeFrequency;
     }
 
-    public void setGenotypeFrequency(Map<String, Integer> genotypeFrequency) {
-        this.genotypeFrequency = genotypeFrequency;
+    public void setGenotypeFrequency(String genotype, int frequency) {
+        this.genotypeFrequency.put(genotype, frequency);
     }
-    public void generateGametes(){
-        List<String> gametes1 = new ArrayList<String>();
-        List<String> gametes2 = new ArrayList<String>();
 
-        String parent1 = this.parents[0].getGenotype();
-        String parent2 = this.parents[1].getGenotype();
+    public List<String> makeGametes(List<String> previous, String current){
+        List<String> tempGam = new ArrayList<>();
 
+        for (String p: previous) {
+            tempGam.add(String.valueOf(current.charAt(0)) + p);
+            tempGam.add(String.valueOf(current.charAt(1)) + p);
+        }
+
+        return tempGam;
+    }
+
+    public List<String> generateGametes(String gen){
+        List<String> geneset1 = new ArrayList<>();
+        for (int i = 1; i < gen.length(); i+=2) {
+            geneset1.add(String.valueOf(gen.charAt(i-1)) + String.valueOf(gen.charAt(i)));
+        }
+        List<String> gametes1 = new ArrayList<>();
+        gametes1.add("");
+
+        for (int i = geneset1.size() - 1; i >=0 ; i--) {
+            gametes1 = makeGametes(gametes1, geneset1.get(i));
+        }
+
+        return gametes1;
+
+    }
+
+    public String makeChild(String parent1, String parent2) {
+        String childgene = "";
+
+        for (int i = 0; i < parent1.length(); i++) {
+            if (String.valueOf(parent1.charAt(i)).equals(this.parents[1].getGenes()[i].getDominantGene())) {
+                childgene = childgene + String.valueOf(parent1.charAt(i)) + String.valueOf(parent2.charAt(i));
+            } else {
+                childgene = childgene + String.valueOf(parent2.charAt(i)) + String.valueOf(parent1.charAt(i));
+            }
+
+        }
+
+        Parent temp = new Parent();
+        temp.setGenes(this.parents[0].getGenes());
+        try{
+            temp.setValue("genotype", childgene);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        this.children.add(new Parent());
+        if (genotypeFrequency.containsKey(childgene)){
+            setGenotypeFrequency(childgene, genotypeFrequency.get(childgene) + 1);
+        } else{
+            setGenotypeFrequency(childgene, 1);
+        }
+
+        return childgene;
+    }
+
+    public void createSquare(List<String> parent1, List<String> parent2){
+        this.square = new String[parent1.size()][parent2.size()];
+        for (int i = 0; i < parent1.size(); i++) {
+            for (int j = 0; j < parent2.size(); j++) {
+                if (i == 0 && j == 0) this.square[0][0] = "F/M";
+                else if (i == 0) this.square[i][j] = parent2.get(j);
+                else if (j == 0) this.square[i][j] = parent1.get(i);
+                else{
+                    this.square[i][j] = makeChild(parent1.get(i), parent2.get(j));
+                }
+            }
+        }
     }
 
     public void cross(Parent p1, Parent p2){
         Parent[] p= {p1, p2};
         setParents(p);
-        generateGametes();
+        List<String> gam1 = generateGametes(this.parents[0].getGenotype());
+        List<String> gam2 = generateGametes(this.parents[1].getGenotype());
+        createSquare(gam1, gam2);
 
     }
 
@@ -68,14 +124,19 @@ public class Generation implements IDataType{
     @Override
     public void print() {
         for (String[] row: square) {
-            for(String element : row) System.out.print("|" +element +"|");
+            for(String element : row) System.out.print("|" + element +"|");
             System.out.println("");
-            for (String element : row)System.out.print("----");
+            for (String element : row)System.out.print("--------");
         }
+    }
+    public void setValue(String field, Parent[] value) throws GrammarExceptions {
+        setParents(value);
     }
 
     @Override
     public void setValue(String field, String value) throws GrammarExceptions {
-        System.out.println("Nothing yet");
+
     }
+
+
 }

@@ -47,7 +47,7 @@ public class Parent implements IDataType{
         }
     }
 
-    public void setGenotype(String genotype) {
+    private void setGenotype(String genotype) {
         try{
             isProperGenotype(genotype);
             this.genotype = genotype;
@@ -77,7 +77,7 @@ public class Parent implements IDataType{
         return sex;
     }
 
-    public void setSex(String sex) {
+    private void setSex(String sex) {
         this.sex = sex;
     }
 
