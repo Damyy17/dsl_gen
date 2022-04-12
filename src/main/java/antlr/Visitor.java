@@ -1,6 +1,7 @@
 package antlr;
 
 import antlr.DSLDataType.*;
+import antlr.DSLExceptions.NonexistentTypeException;
 import antlr.DSLExceptions.ReservedKeywordException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
@@ -8,7 +9,6 @@ import org.antlr.v4.runtime.tree.RuleNode;
 import java.util.*;
 
 public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
-    ArrayList<String> noDuplicateVariables = new ArrayList<>();
     Map<String, Object> variables = new HashMap<>();
     static final String[] keywords = {"genes", "parents", "generation", "set", "dom", "phenotype", "codominance", "location",
     "label", "genotype", "frequency", "square", "find", "cross", "pred", "estimate", "if", "then",
@@ -30,31 +30,36 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                 child.add(e.getText());
         }
 
-        for (String s : child) {
-            if (Arrays.asList(types).contains(child.get(0))) {
-                switch (child.get(0)) {
-                    case "genes":
-                        value = new Gene();
-                        break;
-                    case "parents":
-                        value = new Parent();
-                        break;
-                    case "generation":
-                        value = new Generation();
-                        break;
-                    case "number":
-                        value = new DSLNumber();
-                        break;
-                    case "boolean":
-                        value = new DSLBoolean();
-                        break;
-                    case "string":
-                        value = new DSLString();
-                        break;
+        if (!Arrays.asList(types).contains(child.get(0)))
+            System.out.println(new NonexistentTypeException("Nonexistent Type Exception is occurred!" + child.get(0)).getMessage());
+        else {
+            for (String s : child.subList(1, child.size())) {
+                if (Arrays.asList(types).contains(child.get(0))) {
+                    switch (child.get(0)) {
+                        case "genes":
+                            value = new Gene();
+                            break;
+                        case "parents":
+                            value = new Parent();
+                            break;
+                        case "generation":
+                            value = new Generation();
+                            break;
+                        case "number":
+                            value = new DSLNumber();
+                            break;
+                        case "boolean":
+                            value = new DSLBoolean();
+                            break;
+                        case "string":
+                            value = new DSLString();
+                            break;
+                    }
+                    if (!Arrays.asList(keywords).contains(s))
+                        variables.put(s, value);
+                    else
+                        System.out.println(new ReservedKeywordException("Reserved Keyword Exception is occurred! " + s).getMessage());
                 }
-                if (!Arrays.asList(keywords).contains(s))
-                    variables.put(s, value);
-                else throw new ReservedKeywordException("Reserved Keyword Exception is occurred!");
             }
         }
 
@@ -70,6 +75,12 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
 
     @Override
     public T visitAssigments(GeneticsGrammarParser.AssigmentsContext ctx) {
+        List<String> child = new ArrayList<String>();
+        for (ParseTree e : ctx.children ){
+            child.add(e.getText());
+        }
+
+        System.out.println(child);
         return super.visitAssigments(ctx);
     }
 
