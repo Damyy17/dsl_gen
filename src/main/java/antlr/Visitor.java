@@ -1,6 +1,8 @@
 package antlr;
 
 import antlr.DSLDataType.*;
+import antlr.DSLExceptions.GrammarExceptions;
+import antlr.DSLExceptions.NonexistentTypeException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 
@@ -10,7 +12,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
     Map<String, Object> variables = new HashMap<>();
     static final String[] keywords = {"genes", "parents", "generation", "set", "dom", "phenotype", "codominance", "location",
     "label", "genotype", "frequency", "square", "find", "cross", "pred", "estimate", "if", "then",
-    "else", "end", "while", "do", "print", ",", ";"};
+    "else", "end", "while", "do", "print"};
     static final String[] types = {"genes", "parents", "generation", "number", "boolean", "string"};
 
     @Override
@@ -24,12 +26,13 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
         List<String> child = new ArrayList<String>();
 
         for (ParseTree e : ctx.children) {
-            child.add(e.getText());
+            if (!Objects.equals(e.getText(), ",") && !Objects.equals(e.getText(), ";"))
+                child.add(e.getText());
         }
 
-        for (String ch : child){
-            if (isType(ch)){
-                switch (ch){
+        for (String s : child) {
+            if (Arrays.asList(types).contains(child.get(0))) {
+                switch (child.get(0)) {
                     case "genes":
                         value = new Gene();
                         break;
@@ -49,36 +52,15 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                         value = new DSLString();
                         break;
                 }
-            }
-            if (!isKeyword(ch)){
-                variables.put(ch, value);
+                if (!Arrays.asList(keywords).contains(s)) {
+                    variables.put(s, value);
+                }
             }
         }
 
         System.out.println(child);
+        System.out.println(variables);
         return super.visitDeclaration(ctx);
-    }
-
-    public static boolean isType(String type) {
-        boolean temp = false;
-        for (String t : types) {
-            if (Objects.equals(t, type)) {
-                temp = true;
-                break;
-            }
-        }
-        return temp;
-    }
-
-    public static boolean isKeyword (String keyword){
-        boolean temp = false;
-        for (String k : keywords){
-            if (Objects.equals(k, keyword)){
-                temp = true;
-                break;
-            }
-        }
-        return temp;
     }
 
     @Override
