@@ -83,26 +83,27 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
 
         for (String child : children){
             if (Objects.equals(children.get(0), "dom")){
-                if (variables.containsKey(children.get(3).toLowerCase())){
-                    IDataType temp1 = variables.get(children.get(3).toLowerCase());
+                if (variables.containsKey(children.get(2).toLowerCase())){
+                    IDataType temp = variables.get(children.get(2).toLowerCase());
                     try {
-                        temp1.setValue("dom", children.get(3));
-                        temp1.setValue("rec", children.get(5));
+                        temp.setValue("dom", children.get(2));
+                        temp.setValue("rec", children.get(4));
                     } catch (GrammarExceptions e) {
                         e.printStackTrace();
                     }
                 }
             } else if(Objects.equals(children.get(0), "set")){
-                if (variables.containsKey(children.get(3).toLowerCase())){
-                    IDataType temp2 = variables.get(children.get(3).toLowerCase());
+                if (variables.containsKey(children.get(2).toLowerCase())){
+                    IDataType temp = variables.get(children.get(2).toLowerCase());
                     try {
-                        temp2.setValue(children.get(2), children.get(4).substring(1, children.get(4).length()-1));
+                        temp.setValue(children.get(1), children.get(4).substring(1, children.get(4).length()-1));
                     } catch (GrammarExceptions e) {
                         e.printStackTrace();
                     }
                 }
             }
         }
+
         System.out.println(children);
         return super.visitAssigments(ctx);
     }
