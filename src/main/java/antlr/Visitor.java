@@ -1,6 +1,7 @@
 package antlr;
 
 import antlr.DSLDataType.*;
+import antlr.DSLExceptions.GrammarExceptions;
 import antlr.DSLExceptions.NonexistentTypeException;
 import antlr.DSLExceptions.ReservedKeywordException;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -9,7 +10,7 @@ import org.antlr.v4.runtime.tree.RuleNode;
 import java.util.*;
 
 public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
-    Map<String, Object> variables = new HashMap<>();
+    Map<String, IDataType> variables = new HashMap<>();
     static final String[] keywords = {"genes", "parents", "generation", "set", "dom", "phenotype", "codominance", "location",
     "label", "genotype", "frequency", "square", "find", "cross", "pred", "estimate", "if", "then",
     "else", "end", "while", "do", "print"};
@@ -22,7 +23,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
 
     @Override
     public T visitDeclaration(GeneticsGrammarParser.DeclarationContext ctx) {
-        Object value = null;
+        IDataType value = null;
         List<String> child = new ArrayList<String>();
 
         for (ParseTree e : ctx.children) {
@@ -63,8 +64,8 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
             }
         }
 
-        System.out.println(child);
-        System.out.println(variables);
+//        System.out.println(child);
+//        System.out.println(variables);
         return super.visitDeclaration(ctx);
     }
 
@@ -75,12 +76,34 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
 
     @Override
     public T visitAssigments(GeneticsGrammarParser.AssigmentsContext ctx) {
-        List<String> child = new ArrayList<String>();
+        List<String> children = new ArrayList<String>();
         for (ParseTree e : ctx.children ){
-            child.add(e.getText());
+            children.add(e.getText());
         }
 
-        System.out.println(child);
+        for (String child : children){
+            if (Objects.equals(children.get(0), "dom")){
+                if (variables.containsKey(children.get(3).toLowerCase())){
+                    IDataType temp1 = variables.get(children.get(3).toLowerCase());
+                    try {
+                        temp1.setValue("dom", children.get(3));
+                        temp1.setValue("rec", children.get(5));
+                    } catch (GrammarExceptions e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else if(Objects.equals(children.get(0), "set")){
+                if (variables.containsKey(children.get(3).toLowerCase())){
+                    IDataType temp2 = variables.get(children.get(3).toLowerCase());
+                    try {
+                        temp2.setValue(children.get(2), children.get(4).substring(1, children.get(4).length()-1));
+                    } catch (GrammarExceptions e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        System.out.println(children);
         return super.visitAssigments(ctx);
     }
 
