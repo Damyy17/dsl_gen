@@ -163,7 +163,7 @@ public class Generation implements IDataType{
 
     @Override
     public void setValue(String field, String value) throws GrammarExceptions {
-        if (field.equals("square")) cross();
+        if (field.equals("square") ||field.equals("genotype")) cross();
     }
 
 
