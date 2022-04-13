@@ -187,6 +187,16 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                     e.printStackTrace();
                 }
                 break;
+            case "estimate":
+                System.out.println(var);
+                Generation temp = (Generation) variables.get(var.toLowerCase());
+                try {
+                    temp.setValue(field, var);
+                    temp.setValue("", var);
+                } catch (GrammarExceptions e) {
+                    e.printStackTrace();
+                }
+                break;
         }
 
         super.visitComputations(ctx);
@@ -198,6 +208,30 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
 
     @Override
     public T visitIo(GeneticsGrammarParser.IoContext ctx) {
+        List<String> children = new ArrayList<>();
+        for (ParseTree e : ctx.children ){
+            children.add(e.getText());
+        }
+
+        //checks if word print is written
+        if (children.get(0).equals("print")){
+            IDataType temp = variables.get(children.get(1).toLowerCase());
+            //in dependence of data type print the value of variable 
+            switch (temp.getType()){
+                case "gene":
+                case "generation":
+                case "parent":
+                case "number":
+                case "string":
+                case "boolean":
+                    temp.print();
+                    break;
+                default:
+                    System.out.println(new UndeclaredVariableException("Undeclared Variable Exception is occurred").getMessage());
+            }
+        } else {
+            System.out.println(new GrammarExceptions().getMessage());
+        }
         return super.visitIo(ctx);
     }
 
