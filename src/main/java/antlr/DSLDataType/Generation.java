@@ -111,7 +111,7 @@ public class Generation implements IDataType{
         return i;
     }
 
-    public Map<String, Integer> estimateFreq(int population){
+    public int estimateFreq(String segment, int population){
         if (genotypeFrequency.isEmpty()) estimateFreq();
         int total = children.size();
         Map<String, Integer> popfreq = new HashMap<>();
@@ -120,7 +120,11 @@ public class Generation implements IDataType{
             int pf = (int) Math.floor((double) i/total * population);
             popfreq.put(gene, pf);
         }
-        return popfreq;
+        int i = 0;
+        for (String gene: popfreq.keySet()) {
+            if (gene.contains(segment)) i = i + popfreq.get(gene);
+        }
+        return i;
     }
 
     private void createSquare(List<String> parent1, List<String> parent2){
