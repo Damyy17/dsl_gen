@@ -129,9 +129,10 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                         } catch (GrammarExceptions e) {
                             e.printStackTrace();
                         }
+
                     }
                     //If its standard set for gene
-                    if (temp.getType().equals("genes"))  {
+                    else if (temp.getType().equals("gene"))  {
                         //Checks if gene assignment isnt locked
                         if (parentAssignedFlag) System.out.println(new GrammarExceptions("Illegal Gene Modification Exception. Parent assignment started.").getMessage());
                         //If the field set is label, sends both the label and the Allele as a value to setValye
