@@ -57,7 +57,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                             break;
                     }
                     if (!Arrays.asList(keywords).contains(s))
-                        variables.put(s, value);
+                        variables.put(s.toLowerCase(), value);
                     else
                         System.out.println(new ReservedKeywordException("Reserved Keyword Exception is occurred! " + s).getMessage());
                 }
@@ -104,7 +104,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
             }
         }
 
-        System.out.println(children);
+//        System.out.println(children);
         return super.visitAssigments(ctx);
     }
 
