@@ -4,6 +4,7 @@ import antlr.DSLDataType.*;
 import antlr.DSLExceptions.GrammarExceptions;
 import antlr.DSLExceptions.NonexistentTypeException;
 import antlr.DSLExceptions.ReservedKeywordException;
+import antlr.DSLExceptions.UndeclaredVariableException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 
@@ -15,6 +16,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
     "label", "genotype", "frequency", "square", "find", "cross", "pred", "estimate", "if", "then",
     "else", "end", "while", "do", "print"};
     static final String[] types = {"genes", "parents", "generation", "number", "boolean", "string"};
+    static boolean parentAssignedFlag = false;
 
     @Override
     public T visitChildren(RuleNode node) {
@@ -80,31 +82,82 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
         for (ParseTree e : ctx.children ){
             children.add(e.getText());
         }
-
-        for (String child : children){
+       // for (String child : children){
+        //If it's syntactic sugar that sets dominance
             if (Objects.equals(children.get(0), "dom")){
+                //Checks if variable is declared
                 if (variables.containsKey(children.get(2).toLowerCase())){
+                    //Checks if its not trying to change gene after parent is assigned
+                    if (parentAssignedFlag) System.out.println(new GrammarExceptions("Illegal Gene Modification. Parent Assignment started").getMessage());
+                    //Gets the object attached to the variable
                     IDataType temp = variables.get(children.get(2).toLowerCase());
                     try {
+                        //Sets the notations for dominant and recessive gene
                         temp.setValue("dom", children.get(2));
                         temp.setValue("rec", children.get(4));
                     } catch (GrammarExceptions e) {
                         e.printStackTrace();
                     }
+                }else{
+                    System.out.println(new UndeclaredVariableException("Undeclared Variable Exception. " + children.get(2)).getMessage());
                 }
+                //If its standard variable assignment
             } else if(Objects.equals(children.get(0), "set")){
                 if (variables.containsKey(children.get(2).toLowerCase())){
+                    //Gets the variable
                     IDataType temp = variables.get(children.get(2).toLowerCase());
-                    try {
-                        temp.setValue(children.get(1), children.get(4).substring(1, children.get(4).length()-1));
-                    } catch (GrammarExceptions e) {
-                        e.printStackTrace();
+                    //If its a parent assignment
+                    if (temp.getType().equals("parent")){
+                        //tmp and temp will point to the same object that will be cast as Parent
+                        Parent tmp = (Parent) temp;
+                        //If the genes havent been linked to the parent, links them
+                            if (tmp.getGenes() == null) {
+                                //Gets all available information about declared Genes
+                                List<Gene> g = new ArrayList<>();
+                                for (String k : variables.keySet()) {
+                                    if (variables.get(k).getType().equals("gene")) g.add((Gene) variables.get(k));
+                                }
+                                Gene[] gen = new Gene[g.size()];
+                                //Notifies the parent about the genes that will be used
+                                tmp.setGenes(g.toArray(gen));
+                                //Locks the possibility of changing the genes
+                                parentAssignedFlag = true;
+                            }
+                        //Sets the values for the needed field
+                        try {
+                            temp.setValue(children.get(1), children.get(4));
+                        } catch (GrammarExceptions e) {
+                            e.printStackTrace();
+                        }
                     }
+                    //If its standard set for gene
+                    if (temp.getType().equals("genes"))  {
+                        //Checks if gene assignment isnt locked
+                        if (parentAssignedFlag) System.out.println(new GrammarExceptions("Illegal Gene Modification Exception. Parent assignment started.").getMessage());
+                        //If the field set is label, sends both the label and the Allele as a value to setValye
+                        if (Objects.equals(children.get(1), "label")) {
+                            try {
+                                temp.setValue(children.get(1), children.get(2) + " " + children.get(4));
+                            } catch (GrammarExceptions e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        //If it's something else just sends the field and the value
+                        else{
+                            try {
+                                temp.setValue(children.get(1), children.get(4));
+                            } catch (GrammarExceptions e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                } else {
+                    System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(2)).getMessage());
                 }
             }
-        }
+      //  }
 
-//        System.out.println(children);
+        System.out.println(children);
         return super.visitAssigments(ctx);
     }
 

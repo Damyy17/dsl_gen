@@ -21,7 +21,7 @@ public class Main {
                 "set label B = \"Brown hair\";\n" +
                 "set label b = \"Blond hair\";\n" +
                 "\n" +
-                "set genotype parent1 = AaBb;\n" +
+                "set genotype parent1 = aabb;\n" +
                 "set genotype parent2 = AaBb;\n" +
                 "\n" +
                 "find genotype bb;\n" +

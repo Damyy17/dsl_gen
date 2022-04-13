@@ -30,7 +30,7 @@ public class Parent implements IDataType{
         if (genotype.length() != genes.length * 2) throw new IncorrectGenotypeFormatException("IncorrectGenotypeFormatException. Illegal Genotype length for " + genotype); //Should throw IncorrectGenotypeFormat
 
         //Creates list of all possible Allele
-        List<String> possibleGenes = new ArrayList<String>();
+        List<String> possibleGenes = new ArrayList<>();
         for (Gene allele: this.genes) {
             possibleGenes.addAll(allele.getLabels().keySet());
         }
