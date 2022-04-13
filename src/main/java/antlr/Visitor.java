@@ -8,6 +8,7 @@ import antlr.DSLExceptions.UndeclaredVariableException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 
+import javax.swing.*;
 import java.util.*;
 
 public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
@@ -82,7 +83,8 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
         for (ParseTree e : ctx.children ){
             children.add(e.getText());
         }
-       // for (String child : children){
+
+        if (ctx.computations() == null){
         //If it's syntactic sugar that sets dominance
             if (Objects.equals(children.get(0), "dom")){
                 //Checks if variable is declared
@@ -156,12 +158,39 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                     System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(2)).getMessage());
                 }
             }
-      //  }
+       }
+        else{
+            if (variables.containsKey(children.get(2).toLowerCase())){
+                visitComputations(ctx.computations(), children.get(2), children.get(1));
+            }else{
+                System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(2)).getMessage());
+            }
+        }
 
         System.out.println(children);
         return super.visitAssigments(ctx);
     }
+    public void visitComputations(GeneticsGrammarParser.ComputationsContext ctx, String var, String field) {
+        List<String> children = new ArrayList<>();
+        for (ParseTree e : ctx.children ){
+            children.add(e.getText());
+        }
+        switch (children.get(0)){
+            case "cross":
+                System.out.println(var);
+                Generation tmp = (Generation) variables.get(var.toLowerCase());
+                Parent[] p = {(Parent) variables.get(children.get(1)), (Parent) variables.get(children.get(3))};
+                try {
+                    tmp.setValue("parents", p);
+                    tmp.setValue(field, "");
+                } catch (GrammarExceptions e) {
+                    e.printStackTrace();
+                }
+                break;
+        }
 
+        super.visitComputations(ctx);
+    }
     @Override
     public T visitComputations(GeneticsGrammarParser.ComputationsContext ctx) {
         return super.visitComputations(ctx);
