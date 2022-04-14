@@ -99,10 +99,10 @@ public class Parent implements IDataType{
         else System.out.println(new NonexistentFieldException("Nonexistent Field Exception is occurred!").getMessage());
     }
 
-    public void print(String field, String alpha){
-        if (field.equals("genotype") && genotype.contains(alpha)) System.out.println(this.genotype);
-        if (field.equals("phenotype") && phenotype.contains(alpha)) System.out.println(this.phenotype);
-    }
+//    public void print(String field, String alpha){
+//        if (field.equals("genotype") && genotype.contains(alpha)) System.out.println(this.genotype);
+//        if (field.equals("phenotype") && phenotype.contains(alpha)) System.out.println(this.phenotype);
+//    }
 
     //Sets the value of the specific field or throws an NonexistentFieldException/InaccesibleField Exception
     @Override

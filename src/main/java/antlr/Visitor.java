@@ -1,10 +1,7 @@
 package antlr;
 
 import antlr.DSLDataType.*;
-import antlr.DSLExceptions.SemanticExceptions;
-import antlr.DSLExceptions.NonexistentTypeException;
-import antlr.DSLExceptions.ReservedKeywordException;
-import antlr.DSLExceptions.UndeclaredVariableException;
+import antlr.DSLExceptions.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 
@@ -176,9 +173,15 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
         }
         switch (children.get(0)){
             case "cross":
-                System.out.println(var);
+                if (!variables.containsKey(children.get(1).toLowerCase())) System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(1)).getMessage());
+                if (!variables.containsKey(children.get(3).toLowerCase())) System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(3)).getMessage());
+
+                if(!variables.get(var.toLowerCase()).getType().equals( "generation")) System.out.println(new IncompatibleTypeException("Incompatible Type Exception. " + var + " is not of type Generation").getMessage());
+                if(!variables.get(children.get(1).toLowerCase()).getType().equals("parent")) System.out.println(new IncompatibleTypeException("Incompatible Type Exception. " + children.get(1) + " is not of type Parent").getMessage());
+                if(!variables.get(children.get(3).toLowerCase()).getType().equals("parent")) System.out.println(new IncompatibleTypeException("Incompatible Type Exception. " + children.get(3) + " is not of type Parent").getMessage());
+
                 Generation tmp = (Generation) variables.get(var.toLowerCase());
-                Parent[] p = {(Parent) variables.get(children.get(1)), (Parent) variables.get(children.get(3))};
+                Parent[] p = {(Parent) variables.get(children.get(1).toLowerCase()), (Parent) variables.get(children.get(3).toLowerCase())};
                 try {
                     tmp.setValue("parents", p);
                     tmp.setValue(field, "");
@@ -187,18 +190,20 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                 }
                 break;
             case "estimate":
-                System.out.println(var);
+
+                if (!variables.containsKey(children.get(2).toLowerCase())) System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(2)).getMessage());
+                if(!variables.get(var.toLowerCase()).getType().equals( "number")) System.out.println(new IncompatibleTypeException("Incompatible Type Exception. " + var + " is not of type Number").getMessage());
+                if(!variables.get(children.get(2).toLowerCase()).getType().equals("generation")) System.out.println(new IncompatibleTypeException("Incompatible Type Exception. " + children.get(2) + " is not of type Generation").getMessage());
+
                 Generation generation = (Generation) variables.get(children.get(2).toLowerCase());
-                DSLNumber temp = new DSLNumber();
+                DSLNumber temp = (DSLNumber) variables.get(var.toLowerCase());
                 try {
-                    for (String child : children){
-                        if (child.matches(".*\\d.*")){
-                            temp.setValue(field, String.valueOf(generation.estimateFreq(children.get(1), Integer.parseInt(children.get(4)))));
+                        if (children.size() == 5){
+                            temp.setValue(field, String.valueOf(generation.estimateFreq(children.get(3), Integer.parseInt(children.get(4)))));
                         } else {
-                            temp.setValue(field, String.valueOf(generation.estimateFreq(children.get(1))));
+                            temp.setValue(field, String.valueOf(generation.estimateFreq(children.get(3))));
                         }
                         break;
-                    }
                 } catch (SemanticExceptions e) {
                     e.printStackTrace();
                 }
@@ -218,6 +223,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
         for (ParseTree e : ctx.children ){
             children.add(e.getText());
         }
+        if (!variables.containsKey(children.get(1).toLowerCase())) System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(1)).getMessage());
 
         //
         if (children.size() <= 4){
@@ -233,7 +239,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                     temp.print();
                     break;
                 default:
-                    System.out.println(new UndeclaredVariableException("Undeclared Variable Exception is occurred").getMessage());
+                    System.out.println(new NonexistentTypeException("Nonexistent Type Exception is occurred").getMessage());
             }
         } else if (children.size() <= 5){
             IDataType temp = variables.get(children.get(1).toLowerCase());
@@ -250,25 +256,24 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                     Parent parent = (Parent) variables.get(children.get(1).toLowerCase());
                     parent.print(children.get(2));
                     break;
+                case "number":
+                case "string":
+                case "boolean":
+                    temp.print();
+                    break;
                 default:
-                    System.out.println(new UndeclaredVariableException("Undeclared Variable Exception is occurred!").getMessage());
+                    System.out.println(new NonexistentTypeException("Nonexistent Type Exception is occurred!").getMessage());
             }
         } else {
             IDataType temp = variables.get(children.get(1).toLowerCase());
             StringBuilder alpha = new StringBuilder();
             for (int i = 3; i < children.size() - 1; i++)
                 alpha.append(children.get(i));
-            switch (temp.getType()){
-                case "generation":
-                    Generation generation = (Generation) variables.get(children.get(1).toLowerCase());
-                    generation.print(children.get(2), alpha.toString());
-                    break;
-                case "parent":
-                    Parent parent = (Parent) variables.get(children.get(1).toLowerCase());
-                    parent.print(children.get(2), alpha.toString());
-                    break;
-                default:
-                    System.out.println(new UndeclaredVariableException("Undeclared Variable Exception is occurred!").getMessage());
+            if ("generation".equals(temp.getType())) {
+                Generation generation = (Generation) variables.get(children.get(1).toLowerCase());
+                generation.print(children.get(2).trim(), alpha.toString());
+            } else {
+                System.out.println(new IncompatibleTypeException("Incompatible Type Exception is occurred!").getMessage());
             }
         }
         System.out.println(children);

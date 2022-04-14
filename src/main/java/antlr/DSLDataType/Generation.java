@@ -158,14 +158,16 @@ public class Generation implements IDataType{
     public void print() {
         for (String[] row: square) {
             for(String element : row) System.out.print("|" + element +"|");
-            System.out.println("");
-            for (String element : row)System.out.print("--------");
+            System.out.println(" ");
         }
     }
 
     public void print(String field){
         if (field.equals("square") || field.equals("genotype")) print();
-        else if (field.equals("frequency")) System.out.println(this.genotypeFrequency);
+        else if (field.equals("frequency")) {
+            if (this.genotypeFrequency.isEmpty()) estimateFreq();
+            System.out.println(this.genotypeFrequency);
+        }
         else if (field.equals("phenotype")){
             for(Parent child : children){
                 System.out.println(child.getGenotype() + "-" + child.getPhenotype());
@@ -174,10 +176,24 @@ public class Generation implements IDataType{
         else System.out.println( new NonexistentFieldException("Nonexistent Field Exception is occurred!").getMessage());
     }
 
-    public void print(String field, String alpha){
-        if (field.equals("frequency")) System.out.println(estimateFreq(alpha));
-        if (field.equals("genotype")){
-
+    public void print(String field, String alpha) {
+        switch (field) {
+            case "frequency":
+                System.out.println(estimateFreq(alpha));
+                break;
+            case "genotype":
+                for (Parent child : children) {
+                    if (child.getGenotype().contains(alpha)) child.print(field);
+                }
+                break;
+            case "phenotype":
+                for (Parent child : children) {
+                    if (child.getGenotype().contains(alpha))
+                        System.out.println(child.getGenotype() + " - " + child.getPhenotype());
+                }
+                break;
+            default:
+                System.out.println( new NonexistentFieldException("Nonexistent Field Exception is occurred!").getMessage());
         }
     }
 
