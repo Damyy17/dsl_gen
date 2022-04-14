@@ -18,7 +18,7 @@ public class GeneticsGrammarLexer extends Lexer {
 		new PredictionContextCache();
 	public static final int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		T__9=10, WS=11, WHITESPACE=12, LPAREN=13, RPAREN=14, COOMA=15, SEMICOLON=16, 
+		T__9=10, WS=11, WHITESPACE=12, LPAREN=13, RPAREN=14, COMMA=15, SEMICOLON=16, 
 		SYMBOLS=17, DQ=18, COMMENT=19, LINE_COMMENT=20, BIGALPHA=21, SMALLALPHA=22, 
 		NUMBER=23, STRING=24, TRUE=25, FALSE=26, AND=27, OR=28, CROSS_OPERATION=29, 
 		GENES=30, PARENT=31, GENERATION=32, DSLBOOLEAN=33, DSLNUMBER=34, DSLSTRING=35, 
@@ -36,7 +36,7 @@ public class GeneticsGrammarLexer extends Lexer {
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "T__6", "T__7", "T__8", 
-			"T__9", "WS", "WHITESPACE", "LPAREN", "RPAREN", "COOMA", "SEMICOLON", 
+			"T__9", "WS", "WHITESPACE", "LPAREN", "RPAREN", "COMMA", "SEMICOLON", 
 			"SYMBOLS", "DQ", "COMMENT", "LINE_COMMENT", "BIGALPHA", "SMALLALPHA", 
 			"NUMBER", "DIGIT", "EXP", "ESC", "STRING", "TRUE", "FALSE", "AND", "OR", 
 			"CROSS_OPERATION", "GENES", "PARENT", "GENERATION", "DSLBOOLEAN", "DSLNUMBER", 
@@ -63,7 +63,7 @@ public class GeneticsGrammarLexer extends Lexer {
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, "WS", 
-			"WHITESPACE", "LPAREN", "RPAREN", "COOMA", "SEMICOLON", "SYMBOLS", "DQ", 
+			"WHITESPACE", "LPAREN", "RPAREN", "COMMA", "SEMICOLON", "SYMBOLS", "DQ", 
 			"COMMENT", "LINE_COMMENT", "BIGALPHA", "SMALLALPHA", "NUMBER", "STRING", 
 			"TRUE", "FALSE", "AND", "OR", "CROSS_OPERATION", "GENES", "PARENT", "GENERATION", 
 			"DSLBOOLEAN", "DSLNUMBER", "DSLSTRING", "SET", "DOM", "PHENOTYPE", "CODOMINANCE", 

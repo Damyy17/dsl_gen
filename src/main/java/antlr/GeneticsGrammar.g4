@@ -7,7 +7,7 @@ WHITESPACE : ' ';
 
 LPAREN: '(';
 RPAREN: ')';
-COOMA: ',';
+COMMA: ',';
 SEMICOLON: ';';
 SYMBOLS: '/'|'?'|'.'|';';
 DQ:'"';
@@ -95,8 +95,8 @@ field: LABEL | PHENOTYPE | DOM | CODOMINANCE | LOCATION | GENOTYPE | FREQUENCY |
 
 computations: FIND field id
               | PRED id+
-              | ESTIMATE field id alpha+ number
-              | ESTIMATE field id ',' alpha+
+              | ESTIMATE field id COMMA alpha+ number
+              | ESTIMATE field id COMMA alpha+
               | CROSS id CROSS_OPERATION id ;
 
 flow_structure: IF  condition  THEN  statements+?  ELSE  statements  END ';'
