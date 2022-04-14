@@ -11,8 +11,8 @@ public class Main {
     public static void main(String[] args) throws IOException, Exception {
         String inputCode = "genes a, b;\n" +
                 "parents parent1, parent2;\n" +
-                "generation F1;\n" +
-               // "number int1;\n" +
+                "generation Fam;\n" +
+               "number int1;\n" +
                 "dom: A -> a;\n" +
                 "dom: B -> b;\n" +
                 "\n" +
@@ -24,15 +24,15 @@ public class Main {
                 "set genotype parent1 = aabb;\n" +
                 "set genotype parent2 = AaBb;\n" +
                 "\n" +
-//                "find genotype bb;\n" +
                 "\n" +
-                "set genotype F1 = cross parent1 * parent2;\n" +
-                "set value F1 = estimate frequency F1, bb;\n" +
-               // "set value F1 = estimate frequency P1 bb 200;;\n" +
+                "set genotype Fam = cross parent1 * parent2 ;\n" +
+                "set value int1 = estimate frequency Fam, bb;\n" +
+               "set value int1 = estimate frequency Fam, bb 200 ;\n" +
                 "\n" +
                 "print parent1;\n"+
-                "print F1 square;\n" +
-                "print F1 frequency bb;";
+                "print Fam square;\n" +
+                "print int1;\n" +
+                "print Fam frequency bb;";
         CharStream codeExample = CharStreams.fromString(inputCode);
         GeneticsGrammarLexer lexer = new GeneticsGrammarLexer(codeExample);
         GeneticsGrammarParser parser = new GeneticsGrammarParser(new CommonTokenStream(lexer));

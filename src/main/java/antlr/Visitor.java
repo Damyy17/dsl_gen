@@ -193,8 +193,24 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
 
                 if (!variables.containsKey(children.get(2).toLowerCase())) System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(2)).getMessage());
                 if(!variables.get(var.toLowerCase()).getType().equals( "number")) System.out.println(new IncompatibleTypeException("Incompatible Type Exception. " + var + " is not of type Number").getMessage());
+                System.out.println(children);
                 if(!variables.get(children.get(2).toLowerCase()).getType().equals("generation")) System.out.println(new IncompatibleTypeException("Incompatible Type Exception. " + children.get(2) + " is not of type Generation").getMessage());
 
+                StringBuilder alpha = new StringBuilder();
+                //Finds all the strings that dont contain a number
+                int i = 4;
+                for (; i < children.size(); i++)
+                    try{
+                        Integer.parseInt(children.get(i));
+                        break;
+
+                    }catch(Exception e){alpha.append(children.get(i));}
+                //Deletes the third chracter until no more alphas left
+                for (int j = 4; j<= i; j++){
+                    children.remove(3);
+                }
+                //Adds alpha to the end
+                children.add(3, alpha.toString());
                 Generation generation = (Generation) variables.get(children.get(2).toLowerCase());
                 DSLNumber temp = (DSLNumber) variables.get(var.toLowerCase());
                 try {
@@ -271,7 +287,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                 alpha.append(children.get(i));
             if ("generation".equals(temp.getType())) {
                 Generation generation = (Generation) variables.get(children.get(1).toLowerCase());
-                generation.print(children.get(2).trim(), alpha.toString());
+                generation.print(children.get(2), alpha.toString());
             } else {
                 System.out.println(new IncompatibleTypeException("Incompatible Type Exception is occurred!").getMessage());
             }
