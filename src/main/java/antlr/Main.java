@@ -24,10 +24,10 @@ public class Main {
                 "set genotype parent1 = aabb;\n" +
                 "set genotype parent2 = AaBb;\n" +
                 "\n" +
-                "find genotype bb;\n" +
+//                "find genotype bb;\n" +
                 "\n" +
                 "set genotype F1 = cross parent1 * parent2;\n" +
-               // "set value F1 = estimate frequency P1 bb;;\n" +
+                "set value F1 = estimate frequency F1, bb;\n" +
                // "set value F1 = estimate frequency P1 bb 200;;\n" +
                 "\n" +
                 "print parent1;\n"+

@@ -2,7 +2,8 @@ grammar GeneticsGrammar;
 
 // LEXER
 
-WS: ( '\t' | ' ' | '\r' | '\n' )+ -> skip;
+WS: [ \t\r\n]+ -> skip;
+WHITESPACE : ' ';
 
 LPAREN: '(';
 RPAREN: ')';
@@ -46,7 +47,7 @@ CODOMINANCE: 'codominance';
 LOCATION: 'location';
 LABEL: 'label';
 GENOTYPE: 'genotype';
-FREQUENCY: 'frequency ';
+FREQUENCY: 'frequency';
 PUNNET: 'square';
 VALUE: 'value';
 
@@ -82,20 +83,20 @@ string: STRING;
 number: NUMBER;
 
 alpha: BIGALPHA | SMALLALPHA;
-alpanum: alpha | NUMBER | alpha ;
+alpanum: alpha | NUMBER;
 operator: '>' | '<' | '<=' | '>=' | '==' | '!=' | AND | OR;
 expresion: bool | number | string | alpha+;
 
 assigments: SET field id '=' expresion ';'
             | DOM ':'  id  '->'  id ';'
-            | SET field id '=' computations ';';
+            | SET field id '='  computations ';';
 
 field: LABEL | PHENOTYPE | DOM | CODOMINANCE | LOCATION | GENOTYPE | FREQUENCY | PUNNET | VALUE;
 
-computations: FIND  field  id ';'
-              | PRED  id+ ';'
-              | ESTIMATE field id alpha+ number ';'
-              | ESTIMATE field id alpha+ ';'
+computations: FIND field id
+              | PRED id+
+              | ESTIMATE field id alpha+ number
+              | ESTIMATE field id ',' alpha+
               | CROSS id CROSS_OPERATION id ;
 
 flow_structure: IF  condition  THEN  statements+?  ELSE  statements  END ';'

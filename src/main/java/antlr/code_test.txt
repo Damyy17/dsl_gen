@@ -13,9 +13,11 @@ set label b = "Blond hair";
 set genotype parent1 = AaBb;
 set genotype parent2 = AaBb;
 
-find genotype bb;
+set genotype l1 = find genotype bb;
 
 set genotype F1 = cross parent1 * parent2;
+
+set genotype F1 = estimate frequency F1 bb 200;
 
 print F1 square;
 print F1 frequency bb;
