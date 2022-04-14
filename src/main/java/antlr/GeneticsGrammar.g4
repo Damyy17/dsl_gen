@@ -34,6 +34,9 @@ CROSS_OPERATION: '*';
 GENES: 'genes';
 PARENT: 'parents';
 GENERATION :'generation';
+DSLBOOLEAN: 'boolean';
+DSLNUMBER: 'number';
+DSLSTRING: 'string';
 
 SET: 'set';
 //fields
@@ -72,7 +75,7 @@ statements: declaration | assigments | flow_structure | computations | io;
 
 id: alpanum+;
 declaration: type  id (','  id)?';';
-type: GENES | PARENT | GENERATION | bool | string | number;
+type: GENES | PARENT | GENERATION | DSLBOOLEAN | DSLNUMBER |DSLSTRING;
 
 bool: TRUE | FALSE;
 string: STRING;
