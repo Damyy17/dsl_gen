@@ -1,6 +1,6 @@
 package antlr.DSLDataType;
 
-import antlr.DSLExceptions.GrammarExceptions;
+import antlr.DSLExceptions.SemanticExceptions;
 import antlr.DSLExceptions.NonexistentFieldException;
 
 import java.util.ArrayList;
@@ -165,19 +165,28 @@ public class Generation implements IDataType{
 
     public void print(String field){
         if (field.equals("square") || field.equals("genotype")) print();
+        else if (field.equals("frequency")) System.out.println(this.genotypeFrequency);
+        else if (field.equals("phenotype")){
+            for(Parent child : children){
+                System.out.println(child.getGenotype() + "-" + child.getPhenotype());
+            }
+        }
         else System.out.println( new NonexistentFieldException("Nonexistent Field Exception is occurred!").getMessage());
     }
 
     public void print(String field, String alpha){
-        System.out.println(field + " - " + alpha);
+        if (field.equals("frequency")) System.out.println(estimateFreq(alpha));
+        if (field.equals("genotype")){
+
+        }
     }
 
-    public void setValue(String field, Parent[] value) throws GrammarExceptions {
+    public void setValue(String field, Parent[] value) throws SemanticExceptions {
         setParents(value);
     }
 
     @Override
-    public void setValue(String field, String value) throws GrammarExceptions {
+    public void setValue(String field, String value) throws SemanticExceptions {
         if (field.equals("square") ||field.equals("genotype")) cross();
         if (field.equals("frequency")) estimateFreq();
     }

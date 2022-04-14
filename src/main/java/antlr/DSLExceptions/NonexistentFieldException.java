@@ -1,6 +1,6 @@
 package antlr.DSLExceptions;
 
-public class NonexistentFieldException extends GrammarExceptions{
+public class NonexistentFieldException extends SemanticExceptions {
 
     public NonexistentFieldException() {
         super("Nonexistent Field Exception is occurred!");

@@ -1,6 +1,6 @@
 package antlr.DSLExceptions;
 
-public class InaccessibleFieldException extends GrammarExceptions{
+public class InaccessibleFieldException extends SemanticExceptions {
 
     public InaccessibleFieldException() {
         super("Inaccessible Field Exception is occurred!");

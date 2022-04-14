@@ -1,6 +1,6 @@
 package antlr.DSLExceptions;
 
-public class IncorrectGenotypeFormatException extends GrammarExceptions{
+public class IncorrectGenotypeFormatException extends SemanticExceptions {
 
     public IncorrectGenotypeFormatException() {
         super("Incorrect Genotype Format Exception is occurred!");

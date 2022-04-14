@@ -1,6 +1,6 @@
 package antlr.DSLExceptions;
 
-public class NonexistentTypeException extends GrammarExceptions{
+public class NonexistentTypeException extends SemanticExceptions {
 
     public NonexistentTypeException() {
         super("Nonexistent Type Exception is occurred!");

@@ -1,6 +1,6 @@
 package antlr.DSLExceptions;
 
-public class NonSpecifiedAlleleException extends GrammarExceptions{
+public class NonSpecifiedAlleleException extends SemanticExceptions {
 
     public NonSpecifiedAlleleException() {
         super("Non Specified Allele Exception is occurred!");

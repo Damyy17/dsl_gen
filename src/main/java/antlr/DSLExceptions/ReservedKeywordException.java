@@ -1,6 +1,6 @@
 package antlr.DSLExceptions;
 
-public class ReservedKeywordException extends GrammarExceptions{
+public class ReservedKeywordException extends SemanticExceptions {
 
     public ReservedKeywordException() {
         super("Reserved Keyword Exception is occurred!");

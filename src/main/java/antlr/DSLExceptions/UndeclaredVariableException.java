@@ -1,6 +1,6 @@
 package antlr.DSLExceptions;
 
-public class UndeclaredVariableException extends GrammarExceptions{
+public class UndeclaredVariableException extends SemanticExceptions {
 
     public UndeclaredVariableException() {
         super("Undeclared Variable Exception is occurred");

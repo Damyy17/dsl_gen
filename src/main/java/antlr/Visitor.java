@@ -1,15 +1,13 @@
 package antlr;
 
 import antlr.DSLDataType.*;
-import antlr.DSLExceptions.GrammarExceptions;
+import antlr.DSLExceptions.SemanticExceptions;
 import antlr.DSLExceptions.NonexistentTypeException;
 import antlr.DSLExceptions.ReservedKeywordException;
 import antlr.DSLExceptions.UndeclaredVariableException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 
-import javax.sql.rowset.serial.SerialStruct;
-import javax.swing.*;
 import java.util.*;
 
 public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
@@ -91,14 +89,14 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                 //Checks if variable is declared
                 if (variables.containsKey(children.get(2).toLowerCase())){
                     //Checks if its not trying to change gene after parent is assigned
-                    if (parentAssignedFlag) System.out.println(new GrammarExceptions("Illegal Gene Modification. Parent Assignment started").getMessage());
+                    if (parentAssignedFlag) System.out.println(new SemanticExceptions("Illegal Gene Modification. Parent Assignment started").getMessage());
                     //Gets the object attached to the variable
                     IDataType temp = variables.get(children.get(2).toLowerCase());
                     try {
                         //Sets the notations for dominant and recessive gene
                         temp.setValue("dom", children.get(2));
                         temp.setValue("rec", children.get(4));
-                    } catch (GrammarExceptions e) {
+                    } catch (SemanticExceptions e) {
                         e.printStackTrace();
                     }
                 }else{
@@ -129,7 +127,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                         //Sets the values for the needed field
                         try {
                             temp.setValue(children.get(1), children.get(4));
-                        } catch (GrammarExceptions e) {
+                        } catch (SemanticExceptions e) {
                             e.printStackTrace();
                         }
 
@@ -137,12 +135,12 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                     //If its standard set for gene
                     else if (temp.getType().equals("gene"))  {
                         //Checks if gene assignment isnt locked
-                        if (parentAssignedFlag) System.out.println(new GrammarExceptions("Illegal Gene Modification Exception. Parent assignment started.").getMessage());
+                        if (parentAssignedFlag) System.out.println(new SemanticExceptions("Illegal Gene Modification Exception. Parent assignment started.").getMessage());
                         //If the field set is label, sends both the label and the Allele as a value to setValye
                         if (Objects.equals(children.get(1), "label")) {
                             try {
                                 temp.setValue(children.get(1), children.get(2) + " " + children.get(4));
-                            } catch (GrammarExceptions e) {
+                            } catch (SemanticExceptions e) {
                                 e.printStackTrace();
                             }
                         }
@@ -150,7 +148,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                         else{
                             try {
                                 temp.setValue(children.get(1), children.get(4));
-                            } catch (GrammarExceptions e) {
+                            } catch (SemanticExceptions e) {
                                 e.printStackTrace();
                             }
                         }
@@ -184,13 +182,13 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                 try {
                     tmp.setValue("parents", p);
                     tmp.setValue(field, "");
-                } catch (GrammarExceptions e) {
+                } catch (SemanticExceptions e) {
                     e.printStackTrace();
                 }
                 break;
             case "estimate":
                 System.out.println(var);
-                Generation generation = (Generation) variables.get(var.toLowerCase());
+                Generation generation = (Generation) variables.get(children.get(2).toLowerCase());
                 DSLNumber temp = new DSLNumber();
                 try {
                     for (String child : children){
@@ -201,7 +199,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                         }
                         break;
                     }
-                } catch (GrammarExceptions e) {
+                } catch (SemanticExceptions e) {
                     e.printStackTrace();
                 }
                 break;

@@ -1,6 +1,6 @@
 package antlr.DSLDataType;
 
-import antlr.DSLExceptions.GrammarExceptions;
+import antlr.DSLExceptions.SemanticExceptions;
 import antlr.DSLExceptions.IncompatibleTypeException;
 
 public class DSLBoolean implements IDataType{
@@ -25,7 +25,7 @@ public class DSLBoolean implements IDataType{
     }
 
     @Override
-    public void setValue(String field, String value) throws GrammarExceptions {
+    public void setValue(String field, String value) throws SemanticExceptions {
             if (value.equals("true")) this.value = true;
             else if (value.equals("false")) this.value = false;
             else throw new IncompatibleTypeException("IncompatibleTypeException. "+ value + " cannot be attributed to boolean."); //Throws Incompatible Type Exception

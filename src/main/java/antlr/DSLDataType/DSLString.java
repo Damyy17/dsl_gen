@@ -1,6 +1,6 @@
 package antlr.DSLDataType;
 
-import antlr.DSLExceptions.GrammarExceptions;
+import antlr.DSLExceptions.SemanticExceptions;
 
 public class DSLString implements IDataType{
     String value;
@@ -19,7 +19,7 @@ public class DSLString implements IDataType{
     }
 
     @Override
-    public void setValue(String field, String value) throws GrammarExceptions {
+    public void setValue(String field, String value) throws SemanticExceptions {
         this.value = value;
     }
 }

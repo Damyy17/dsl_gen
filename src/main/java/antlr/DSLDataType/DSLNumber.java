@@ -1,6 +1,6 @@
 package antlr.DSLDataType;
 
-import antlr.DSLExceptions.GrammarExceptions;
+import antlr.DSLExceptions.SemanticExceptions;
 import antlr.DSLExceptions.IncompatibleTypeException;
 
 public class DSLNumber implements IDataType{
@@ -19,7 +19,7 @@ public class DSLNumber implements IDataType{
     }
 
     @Override
-    public void setValue(String field, String value) throws GrammarExceptions {
+    public void setValue(String field, String value) throws SemanticExceptions {
         try{
             this.value = Double.parseDouble(value);
         }catch (Exception e){

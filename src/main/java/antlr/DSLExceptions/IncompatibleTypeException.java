@@ -1,6 +1,6 @@
 package antlr.DSLExceptions;
 
-public class IncompatibleTypeException extends GrammarExceptions{
+public class IncompatibleTypeException extends SemanticExceptions {
 
     public IncompatibleTypeException() {
         super("Incompatible Type Exception is occurred!");

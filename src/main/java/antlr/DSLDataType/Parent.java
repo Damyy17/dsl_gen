@@ -25,7 +25,7 @@ public class Parent implements IDataType{
 
     //Method to check if the Genotype is properly declared
     //Instead of boolean, will throw the proper errors
-    private void isProperGenotype (String genotype) throws GrammarExceptions {
+    private void isProperGenotype (String genotype) throws SemanticExceptions {
         //Check if length accounts for 2 allele of each gene type declared
         if (genotype.length() != genes.length * 2) throw new IncorrectGenotypeFormatException("IncorrectGenotypeFormatException. Illegal Genotype length for " + genotype); //Should throw IncorrectGenotypeFormat
 
@@ -100,12 +100,13 @@ public class Parent implements IDataType{
     }
 
     public void print(String field, String alpha){
-        System.out.println(field + " - " + alpha);
+        if (field.equals("genotype") && genotype.contains(alpha)) System.out.println(this.genotype);
+        if (field.equals("phenotype") && phenotype.contains(alpha)) System.out.println(this.phenotype);
     }
 
     //Sets the value of the specific field or throws an NonexistentFieldException/InaccesibleField Exception
     @Override
-    public void setValue(String field, String value) throws GrammarExceptions {
+    public void setValue(String field, String value) throws SemanticExceptions {
         switch (field) {
             case "genotype":
                 setGenotype(value);
