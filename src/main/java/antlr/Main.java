@@ -28,6 +28,7 @@ public class Main {
                 "\n" +
                 "set genotype F1 = cross parent1 * parent2;\n" +
                 "\n" +
+                "print parent1;\n"+
                 "print F1 square;\n" +
                 "print F1 frequency bb;";
         CharStream codeExample = CharStreams.fromString(inputCode);

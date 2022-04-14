@@ -71,6 +71,11 @@ public class Gene implements IDataType{
         System.out.println(getLabels());
     }
 
+    public void print(String field) {
+        if (field.equals("location")) System.out.println(this.location);
+        else System.out.println(new NonexistentFieldException("Nonexistent Field Exception is occurred!").getMessage());
+    }
+
     //Sets the value of the specific field or throws an NonexistentFieldException
     @Override
     public void setValue(String field, String value) throws GrammarExceptions {

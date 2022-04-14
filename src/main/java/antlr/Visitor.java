@@ -8,6 +8,7 @@ import antlr.DSLExceptions.UndeclaredVariableException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 
+import javax.sql.rowset.serial.SerialStruct;
 import javax.swing.*;
 import java.util.*;
 
@@ -167,7 +168,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
             }
         }
 
-        System.out.println(children);
+//        System.out.println(children);
         return super.visitAssigments(ctx);
     }
     public void visitComputations(GeneticsGrammarParser.ComputationsContext ctx, String var, String field) {
@@ -189,10 +190,17 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                 break;
             case "estimate":
                 System.out.println(var);
-                Generation temp = (Generation) variables.get(var.toLowerCase());
+                Generation generation = (Generation) variables.get(var.toLowerCase());
+                DSLNumber temp = new DSLNumber();
                 try {
-                    temp.setValue(field, var);
-                    temp.setValue("", var);
+                    for (String child : children){
+                        if (child.matches(".*\\d.*")){
+                            temp.setValue(field, String.valueOf(generation.estimateFreq(children.get(1), Integer.parseInt(children.get(4)))));
+                        } else {
+                            temp.setValue(field, String.valueOf(generation.estimateFreq(children.get(1))));
+                        }
+                        break;
+                    }
                 } catch (GrammarExceptions e) {
                     e.printStackTrace();
                 }
@@ -213,10 +221,10 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
             children.add(e.getText());
         }
 
-        //checks if word print is written
-        if (children.get(0).equals("print")){
+        //
+        if (children.size() <= 4){
             IDataType temp = variables.get(children.get(1).toLowerCase());
-            //in dependence of data type print the value of variable 
+            //in dependence of data type print the value of variable
             switch (temp.getType()){
                 case "gene":
                 case "generation":
@@ -229,9 +237,43 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                 default:
                     System.out.println(new UndeclaredVariableException("Undeclared Variable Exception is occurred").getMessage());
             }
+        } else if (children.size() <= 5){
+            IDataType temp = variables.get(children.get(1).toLowerCase());
+            switch (temp.getType()){
+                case "gene":
+                    Gene gene = (Gene) variables.get(children.get(1).toLowerCase());
+                    gene.print(children.get(2));
+                    break;
+                case "generation":
+                    Generation generation = (Generation) variables.get(children.get(1).toLowerCase());
+                    generation.print(children.get(2));
+                    break;
+                case "parent":
+                    Parent parent = (Parent) variables.get(children.get(1).toLowerCase());
+                    parent.print(children.get(2));
+                    break;
+                default:
+                    System.out.println(new UndeclaredVariableException("Undeclared Variable Exception is occurred!").getMessage());
+            }
         } else {
-            System.out.println(new GrammarExceptions().getMessage());
+            IDataType temp = variables.get(children.get(1).toLowerCase());
+            StringBuilder alpha = new StringBuilder();
+            for (int i = 3; i < children.size() - 1; i++)
+                alpha.append(children.get(i));
+            switch (temp.getType()){
+                case "generation":
+                    Generation generation = (Generation) variables.get(children.get(1).toLowerCase());
+                    generation.print(children.get(2), alpha.toString());
+                    break;
+                case "parent":
+                    Parent parent = (Parent) variables.get(children.get(1).toLowerCase());
+                    parent.print(children.get(2), alpha.toString());
+                    break;
+                default:
+                    System.out.println(new UndeclaredVariableException("Undeclared Variable Exception is occurred!").getMessage());
+            }
         }
+        System.out.println(children);
         return super.visitIo(ctx);
     }
 

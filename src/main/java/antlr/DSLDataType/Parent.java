@@ -93,6 +93,16 @@ public class Parent implements IDataType{
         System.out.println(this.genotype + " - " + this.phenotype);
     }
 
+    public void print(String field){
+        if (field.equals("genotype")) System.out.println(this.genotype);
+        else if (field.equals("phenotype")) System.out.println(this.phenotype);
+        else System.out.println(new NonexistentFieldException("Nonexistent Field Exception is occurred!").getMessage());
+    }
+
+    public void print(String field, String alpha){
+        System.out.println(field + " - " + alpha);
+    }
+
     //Sets the value of the specific field or throws an NonexistentFieldException/InaccesibleField Exception
     @Override
     public void setValue(String field, String value) throws GrammarExceptions {

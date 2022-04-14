@@ -1,6 +1,7 @@
 package antlr.DSLDataType;
 
 import antlr.DSLExceptions.GrammarExceptions;
+import antlr.DSLExceptions.NonexistentFieldException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -161,6 +162,16 @@ public class Generation implements IDataType{
             for (String element : row)System.out.print("--------");
         }
     }
+
+    public void print(String field){
+        if (field.equals("square") || field.equals("genotype")) print();
+        else System.out.println( new NonexistentFieldException("Nonexistent Field Exception is occurred!").getMessage());
+    }
+
+    public void print(String field, String alpha){
+        System.out.println(field + " - " + alpha);
+    }
+
     public void setValue(String field, Parent[] value) throws GrammarExceptions {
         setParents(value);
     }

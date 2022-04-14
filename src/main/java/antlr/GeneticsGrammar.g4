@@ -45,6 +45,7 @@ LABEL: 'label';
 GENOTYPE: 'genotype';
 FREQUENCY: 'frequency ';
 PUNNET: 'square';
+VALUE: 'value';
 
 //computations
 FIND: 'find';
@@ -86,11 +87,11 @@ assigments: SET field id '=' expresion ';'
             | DOM ':'  id  '->'  id ';'
             | SET field id '=' computations ';';
 
-field: LABEL | PHENOTYPE | DOM | CODOMINANCE | LOCATION | GENOTYPE | FREQUENCY | PUNNET;
+field: LABEL | PHENOTYPE | DOM | CODOMINANCE | LOCATION | GENOTYPE | FREQUENCY | PUNNET | VALUE;
 
 computations: FIND  field  id ';'
               | PRED  id+ ';'
-              | ESTIMATE  id  number ';'
+              | ESTIMATE field id alpha+ number ';'
               | ESTIMATE field id alpha+ ';'
               | CROSS id CROSS_OPERATION id ;
 
