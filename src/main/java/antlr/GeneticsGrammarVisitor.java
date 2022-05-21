@@ -1,4 +1,4 @@
-// Generated from D:/HW University/Year2/PBL_4/dsl_gen/src/main/java/antlr\GeneticsGrammar.g4 by ANTLR 4.9.2
+// Generated from D:/HW University/Year2/PBL_4/dsl_gen/src/main/java/antlr\GeneticsGrammar.g4 by ANTLR 4.10.1
 package antlr;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -58,6 +58,24 @@ public interface GeneticsGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitNumber(GeneticsGrammarParser.NumberContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GeneticsGrammarParser#values}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitValues(GeneticsGrammarParser.ValuesContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GeneticsGrammarParser#array_init}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArray_init(GeneticsGrammarParser.Array_initContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GeneticsGrammarParser#array}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArray(GeneticsGrammarParser.ArrayContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link GeneticsGrammarParser#alpha}.
 	 * @param ctx the parse tree

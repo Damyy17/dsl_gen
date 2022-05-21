@@ -1,4 +1,4 @@
-// Generated from D:/HW University/Year2/PBL_4/dsl_gen/src/main/java/antlr\GeneticsGrammar.g4 by ANTLR 4.9.2
+// Generated from D:/HW University/Year2/PBL_4/dsl_gen/src/main/java/antlr\GeneticsGrammar.g4 by ANTLR 4.10.1
 package antlr;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -87,6 +87,36 @@ public interface GeneticsGrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNumber(GeneticsGrammarParser.NumberContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GeneticsGrammarParser#values}.
+	 * @param ctx the parse tree
+	 */
+	void enterValues(GeneticsGrammarParser.ValuesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GeneticsGrammarParser#values}.
+	 * @param ctx the parse tree
+	 */
+	void exitValues(GeneticsGrammarParser.ValuesContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GeneticsGrammarParser#array_init}.
+	 * @param ctx the parse tree
+	 */
+	void enterArray_init(GeneticsGrammarParser.Array_initContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GeneticsGrammarParser#array_init}.
+	 * @param ctx the parse tree
+	 */
+	void exitArray_init(GeneticsGrammarParser.Array_initContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GeneticsGrammarParser#array}.
+	 * @param ctx the parse tree
+	 */
+	void enterArray(GeneticsGrammarParser.ArrayContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GeneticsGrammarParser#array}.
+	 * @param ctx the parse tree
+	 */
+	void exitArray(GeneticsGrammarParser.ArrayContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link GeneticsGrammarParser#alpha}.
 	 * @param ctx the parse tree

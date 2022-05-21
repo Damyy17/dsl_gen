@@ -81,11 +81,15 @@ type: GENES | PARENT | GENERATION | DSLBOOLEAN | DSLNUMBER |DSLSTRING;
 bool: TRUE | FALSE;
 string: STRING;
 number: NUMBER;
+// added new -> array
+values : bool | number | string ;
+array_init: (values | id | alpha) ',' array_init | (values | id | alpha);
+array: '[' array_init ']';
 
 alpha: BIGALPHA | SMALLALPHA;
 alpanum: alpha | NUMBER;
 operator: '>' | '<' | '<=' | '>=' | '==' | '!=' | AND | OR;
-expresion: bool | number | string | alpha+;
+expresion: bool | number | string | array | alpha+;
 
 assigments: SET field id '=' expresion ';'
             | DOM ':'  id  '->'  id ';'
