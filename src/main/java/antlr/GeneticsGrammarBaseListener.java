@@ -124,13 +124,37 @@ public class GeneticsGrammarBaseListener implements GeneticsGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArray_init(GeneticsGrammarParser.Array_initContext ctx) { }
+	@Override public void enterArray_init_id(GeneticsGrammarParser.Array_init_idContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArray_init(GeneticsGrammarParser.Array_initContext ctx) { }
+	@Override public void exitArray_init_id(GeneticsGrammarParser.Array_init_idContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArray_init_alpha(GeneticsGrammarParser.Array_init_alphaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArray_init_alpha(GeneticsGrammarParser.Array_init_alphaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArray_init_values(GeneticsGrammarParser.Array_init_valuesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArray_init_values(GeneticsGrammarParser.Array_init_valuesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

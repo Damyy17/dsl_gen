@@ -98,15 +98,35 @@ public interface GeneticsGrammarListener extends ParseTreeListener {
 	 */
 	void exitValues(GeneticsGrammarParser.ValuesContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link GeneticsGrammarParser#array_init}.
+	 * Enter a parse tree produced by {@link GeneticsGrammarParser#array_init_id}.
 	 * @param ctx the parse tree
 	 */
-	void enterArray_init(GeneticsGrammarParser.Array_initContext ctx);
+	void enterArray_init_id(GeneticsGrammarParser.Array_init_idContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link GeneticsGrammarParser#array_init}.
+	 * Exit a parse tree produced by {@link GeneticsGrammarParser#array_init_id}.
 	 * @param ctx the parse tree
 	 */
-	void exitArray_init(GeneticsGrammarParser.Array_initContext ctx);
+	void exitArray_init_id(GeneticsGrammarParser.Array_init_idContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GeneticsGrammarParser#array_init_alpha}.
+	 * @param ctx the parse tree
+	 */
+	void enterArray_init_alpha(GeneticsGrammarParser.Array_init_alphaContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GeneticsGrammarParser#array_init_alpha}.
+	 * @param ctx the parse tree
+	 */
+	void exitArray_init_alpha(GeneticsGrammarParser.Array_init_alphaContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GeneticsGrammarParser#array_init_values}.
+	 * @param ctx the parse tree
+	 */
+	void enterArray_init_values(GeneticsGrammarParser.Array_init_valuesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GeneticsGrammarParser#array_init_values}.
+	 * @param ctx the parse tree
+	 */
+	void exitArray_init_values(GeneticsGrammarParser.Array_init_valuesContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link GeneticsGrammarParser#array}.
 	 * @param ctx the parse tree

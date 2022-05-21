@@ -80,7 +80,21 @@ public class GeneticsGrammarBaseVisitor<T> extends AbstractParseTreeVisitor<T> i
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitArray_init(GeneticsGrammarParser.Array_initContext ctx) { return visitChildren(ctx); }
+	@Override public T visitArray_init_id(GeneticsGrammarParser.Array_init_idContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitArray_init_alpha(GeneticsGrammarParser.Array_init_alphaContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitArray_init_values(GeneticsGrammarParser.Array_init_valuesContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -157,16 +171,5 @@ public class GeneticsGrammarBaseVisitor<T> extends AbstractParseTreeVisitor<T> i
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitIo(GeneticsGrammarParser.IoContext ctx) {
-//		try{
-//		System.out.println(ctx.children);
-//		}catch (Exception e){
-//			System.out.println("None");
-//		}
-//		String x = ctx.children.toString();
-//		if (x.contains("print")){
-//			System.out.println(ctx.PRINT());
-//		}
-
-		return visitChildren(ctx);}
+	@Override public T visitIo(GeneticsGrammarParser.IoContext ctx) { return visitChildren(ctx); }
 }

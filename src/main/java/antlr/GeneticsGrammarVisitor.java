@@ -65,11 +65,23 @@ public interface GeneticsGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitValues(GeneticsGrammarParser.ValuesContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link GeneticsGrammarParser#array_init}.
+	 * Visit a parse tree produced by {@link GeneticsGrammarParser#array_init_id}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitArray_init(GeneticsGrammarParser.Array_initContext ctx);
+	T visitArray_init_id(GeneticsGrammarParser.Array_init_idContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GeneticsGrammarParser#array_init_alpha}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArray_init_alpha(GeneticsGrammarParser.Array_init_alphaContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GeneticsGrammarParser#array_init_values}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArray_init_values(GeneticsGrammarParser.Array_init_valuesContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link GeneticsGrammarParser#array}.
 	 * @param ctx the parse tree

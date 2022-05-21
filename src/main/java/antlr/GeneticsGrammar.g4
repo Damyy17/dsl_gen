@@ -81,10 +81,13 @@ type: GENES | PARENT | GENERATION | DSLBOOLEAN | DSLNUMBER |DSLSTRING;
 bool: TRUE | FALSE;
 string: STRING;
 number: NUMBER;
+
 // added new -> array
 values : bool | number | string ;
-array_init: (values | id | alpha) ',' array_init | (values | id | alpha);
-array: '[' array_init ']';
+array_init_id: id  ',' array_init_id | id;
+array_init_alpha: alpha+ ',' array_init_alpha | alpha+;
+array_init_values: values ',' array_init_values | values ;
+array: '[' (array_init_alpha | array_init_id | array_init_values) ']';
 
 alpha: BIGALPHA | SMALLALPHA;
 alpanum: alpha | NUMBER;
