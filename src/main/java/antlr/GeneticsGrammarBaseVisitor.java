@@ -1,4 +1,4 @@
-// Generated from D:/HW University/Year2/PBL_4/dsl_gen/src/main/java/antlr\GeneticsGrammar.g4 by ANTLR 4.9.2
+// Generated from D:/HW University/Year2/PBL_4/dsl_gen/src/main/java/antlr\GeneticsGrammar.g4 by ANTLR 4.10.1
 package antlr;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -73,9 +73,28 @@ public class GeneticsGrammarBaseVisitor<T> extends AbstractParseTreeVisitor<T> i
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAlpha(GeneticsGrammarParser.AlphaContext ctx) {
-		//System.out.println(ctx.children);
-		return visitChildren(ctx); }
+	@Override public T visitValues(GeneticsGrammarParser.ValuesContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitArray_init(GeneticsGrammarParser.Array_initContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitArray(GeneticsGrammarParser.ArrayContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitAlpha(GeneticsGrammarParser.AlphaContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -149,5 +168,5 @@ public class GeneticsGrammarBaseVisitor<T> extends AbstractParseTreeVisitor<T> i
 //			System.out.println(ctx.PRINT());
 //		}
 
-		return visitChildren(ctx); }
+		return visitChildren(ctx);}
 }
