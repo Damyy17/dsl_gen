@@ -63,6 +63,7 @@ THEN: 'then';
 ELSE: 'else';
 END: 'end';
 WHILE: 'while';
+FOR: 'for';
 DO: 'do';
 
 //io
@@ -108,7 +109,11 @@ computations: FIND field id
 
 flow_structure: IF  condition  THEN  statements+?  ELSE  statements  END ';'
                 | condition '?' condition ':' statements ';'
-                | WHILE  condition  DO  statements+  END ';' ;
+                | WHILE  condition  DO  statements+  END ';'
+                | FOR iterator = id 'in' id ':'
+                //does smth
+                END
+                ;
 
 condition: id operator id
          | id operator expresion;

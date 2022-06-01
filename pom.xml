@@ -13,11 +13,11 @@
         <antlr4.listener>true</antlr4.listener>
     </properties>
 
-    <dependencies>
+    <dependencies>d
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
-            <version>4.9.3</version>
+            <version>4.10.1</version>
         </dependency>
     </dependencies>
 
