@@ -1,12 +1,10 @@
 package antlr.DSLDataType;
 
+import antlr.DSLExceptions.IncorrectGenotypeFormatException;
 import antlr.DSLExceptions.SemanticExceptions;
 import antlr.DSLExceptions.NonexistentFieldException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import java.lang.String;
 
@@ -77,18 +75,21 @@ public class Generation implements IDataType{
 
         }
 
+        createParent(this.parents[0].getGenes(), childgene);
+        return childgene;
+    }
+
+    void createParent(Gene[] genes, String childgene){
         Parent temp = new Parent();
-        temp.setGenes(this.parents[0].getGenes());
+        temp.setGenes(genes);
         try{
             temp.setValue("genotype", childgene);
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
-        this.children.add(new Parent());
-
-
-        return childgene;
+        this.children.add(temp);
     }
+
 
     private void estimateFreq(){
         for (int i = 1; i < square.length; i++) {
@@ -149,6 +150,51 @@ public class Generation implements IDataType{
         createSquare(gam1, gam2);
     }
 
+    public void find(String alpha, Map<String, Gene> genes)throws IncorrectGenotypeFormatException {
+        Map<String, Gene> existingGenes = new HashMap<>(genes);
+        if (alpha.length() % 2 != 0) throw new IncorrectGenotypeFormatException("Incorrect Genotype Exception is occured. " + alpha +"is not a proper allele");
+        //Checks if the allele is defined properly and deletes the genes from map of existing genes
+        for (int i  = 1; i < alpha.length(); i+=2){
+            if (!Character.toString(alpha.charAt(i)).equalsIgnoreCase(Character.toString(alpha.charAt(i - 1)))) throw new IncorrectGenotypeFormatException("Incorrect Genotype Exception is occured. " + alpha +"is not a proper allele");
+            else {
+                existingGenes.remove(Character.toString(alpha.charAt(i)).toLowerCase());
+            }
+        }
+        List<String> gene = new ArrayList<>(existingGenes.keySet());
+        List<String> geno1 = new ArrayList<>();
+        geno1.add(alpha);
+        for (String k: gene) {
+            //Creates each allele variant
+            String mix = existingGenes.get(k).getDominantGene() + existingGenes.get(k).getRecessiveGene();
+            String rec = existingGenes.get(k).getRecessiveGene() + existingGenes.get(k).getRecessiveGene();
+            String dom = existingGenes.get(k).getDominantGene() + existingGenes.get(k).getDominantGene();
+            //Creates list to hold more complete genotype
+            List<String> geno2 = new ArrayList<>();
+            //Adds to each uncomplete genotype variant the current new mixed, rec and dom allele
+            for (String s: geno1) {
+                geno2.add(s + mix);
+                geno2.add(s + rec);
+                geno2.add(s + dom);
+            }
+            geno1 = geno2;
+        }
+        List<String> geno3 = new ArrayList<>();
+        //Sorts each allele alphabetically
+        for (String s: geno1) {
+            String [] c = new String[s.length()];
+            for (int i = 0; i < s.length(); i++) c[i] = Character.toString(s.charAt(i));
+            Arrays.sort(c, String.CASE_INSENSITIVE_ORDER);
+            StringBuilder tmp = new StringBuilder("");
+            for (int i = 0; i < s.length(); i++) tmp.append(c[i]);
+            geno3.add(tmp.toString());
+        }
+        //Create children
+        for (String s: geno3) {
+            createParent(genes.values().toArray(new Gene[genes.size()]), s);
+        }
+    }
+
+
     @Override
     public String getType() {
         return "generation";
@@ -163,7 +209,12 @@ public class Generation implements IDataType{
     }
 
     public void print(String field){
-        if (field.equals("square") || field.equals("genotype")) print();
+        if (field.equals("square")) print();
+        else if (field.equals("genotype")){
+            for (Parent p: this.children) {
+                p.print();
+            }
+        }
         else if (field.equals("frequency")) {
             if (this.genotypeFrequency.isEmpty()) estimateFreq();
             System.out.println(this.genotypeFrequency);

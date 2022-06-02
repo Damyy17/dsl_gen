@@ -12,7 +12,8 @@ public class Main {
         String inputCode = "genes a, b;\n" +
                 "parents parent1, parent2;\n" +
                 "generation Fam;\n" +
-               "number int1;\n" +
+                "generation Fam2;\n" +
+                "number int1;\n" +
                 "dom: A -> a;\n" +
                 "dom: B -> b;\n" +
                 "\n" +
@@ -26,9 +27,12 @@ public class Main {
                 "\n" +
                 "\n" +
                 "set genotype Fam = cross parent1 * parent2 ;\n" +
+                "set genotype Fam2 = find genotype bb ;\n" +
+                "set genotype Fam2 = pred Fam ;\n" +
                 "set value int1 = estimate frequency Fam, bb;\n" +
                "set value int1 = estimate frequency Fam, bb 200 ;\n" +
                 "\n" +
+                "print parent1;\n"+
                 "print parent1;\n"+
                 "print Fam square;\n" +
                 "print int1;\n" +

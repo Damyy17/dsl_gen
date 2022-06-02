@@ -110,10 +110,10 @@ computations: FIND field id
 flow_structure: IF  condition  THEN  statements+?  ELSE  statements  END ';'
                 | condition '?' condition ':' statements ';'
                 | WHILE  condition  DO  statements+  END ';'
-                | FOR iterator = id 'in' id ':'
+              //  | FOR iterator = id 'in' id ':'
                 //does smth
-                END
-                ;
+              //  END
+                //;
 
 condition: id operator id
          | id operator expresion;

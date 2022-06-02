@@ -193,7 +193,6 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
 
                 if (!variables.containsKey(children.get(2).toLowerCase())) System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(2)).getMessage());
                 if(!variables.get(var.toLowerCase()).getType().equals( "number")) System.out.println(new IncompatibleTypeException("Incompatible Type Exception. " + var + " is not of type Number").getMessage());
-                System.out.println(children);
                 if(!variables.get(children.get(2).toLowerCase()).getType().equals("generation")) System.out.println(new IncompatibleTypeException("Incompatible Type Exception. " + children.get(2) + " is not of type Generation").getMessage());
 
                 StringBuilder alpha = new StringBuilder();
@@ -222,6 +221,24 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                         break;
                 } catch (SemanticExceptions e) {
                     e.printStackTrace();
+                }
+                break;
+            case "find":
+                if(!variables.get(var.toLowerCase()).getType().equals( "generation")) System.out.println(new IncompatibleTypeException("Incompatible Type Exception. " + var + " is not of type Generation").getMessage());
+                if (!children.get(1).equals("genotype")) System.out.println(new InaccessibleFieldException("Inaccessible Field Exception is occured. " +var + " is not a field used for this operation").getMessage());
+                Generation generation1 = (Generation) variables.get(var.toLowerCase());
+                StringBuilder alpha1 = new StringBuilder();
+                for (int j = 2; j < children.size(); j++) {
+                    alpha1.append(children.get(j));
+                }
+                Map<String, Gene> tmpgene = new HashMap<>();
+                for (String tmpvar : variables.keySet()){
+                    if (variables.get(tmpvar).getType().equals("gene")) tmpgene.put(tmpvar, (Gene) variables.get(tmpvar));
+                }
+                try {
+                    generation1.find(alpha1.toString(), tmpgene);
+                } catch (SemanticExceptions e) {
+                    System.out.println(e.getMessage());
                 }
                 break;
         }
@@ -292,7 +309,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                 System.out.println(new IncompatibleTypeException("Incompatible Type Exception is occurred!").getMessage());
             }
         }
-        System.out.println(children);
+       // System.out.println(children);
         return super.visitIo(ctx);
     }
 

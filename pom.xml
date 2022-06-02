@@ -13,7 +13,7 @@
         <antlr4.listener>true</antlr4.listener>
     </properties>
 
-    <dependencies>d
+    <dependencies>
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
