@@ -241,6 +241,9 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                     System.out.println(e.getMessage());
                 }
                 break;
+            case "pred":
+
+                break;
         }
 
         super.visitComputations(ctx);
@@ -251,15 +254,20 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
     }
 
     @Override
+    public T visitArray(GeneticsGrammarParser.ArrayContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    @Override
     public T visitIo(GeneticsGrammarParser.IoContext ctx) {
         List<String> children = new ArrayList<>();
         for (ParseTree e : ctx.children ){
             children.add(e.getText());
         }
         if (!variables.containsKey(children.get(1).toLowerCase())) System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(1)).getMessage());
-
+        System.out.println(children);
         //
-        if (children.size() <= 4){
+        if (children.size() <= 3){
             IDataType temp = variables.get(children.get(1).toLowerCase());
             //in dependence of data type print the value of variable
             switch (temp.getType()){
@@ -274,7 +282,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                 default:
                     System.out.println(new NonexistentTypeException("Nonexistent Type Exception is occurred").getMessage());
             }
-        } else if (children.size() <= 5){
+        } else if (children.size() <= 4){
             IDataType temp = variables.get(children.get(1).toLowerCase());
             switch (temp.getType()){
                 case "gene":
