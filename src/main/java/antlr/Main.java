@@ -28,7 +28,8 @@ public class Main {
                 "\n" +
                 "set genotype Fam = cross parent1 * parent2 ;\n" +
                 "print Fam2 genotype; \n" +
-                "set genotype Fam2 = pred Fam ;\n" +
+                "set genotype Fam2 = pred [parent1, parent2] ;\n" +
+                "set genotype Fam2 = pred [aaBB, AABB, aaBb] ;\n" +
                 "set value int1 = estimate frequency Fam, bb;\n" +
                "set value int1 = estimate frequency Fam, bb 200 ;\n" +
                 "\n" +

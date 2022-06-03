@@ -69,10 +69,6 @@ public class Generation implements IDataType{
             }
         }
 
-        for (Parent[] p: actualparents) {
-            System.out.println(p[0].getGenotype()+ " " + p[1].getGenotype());
-        }
-
     }
 
     public Map<String, Integer> getGenotypeFrequency() {
@@ -261,6 +257,11 @@ public class Generation implements IDataType{
         if (field.equals("square")) print();
         else if (field.equals("genotype")){
             for (Parent p: this.children) {
+                p.print();
+            }
+        }
+        else if(field.equals("parents")){
+            for (Parent p: this.parents) {
                 p.print();
             }
         }

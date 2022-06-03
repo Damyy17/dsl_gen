@@ -242,10 +242,9 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                 }
                 break;
             case "pred":
-                System.out.println(children);
                 if(!variables.get(var.toLowerCase()).getType().equals( "generation")) System.out.println(new IncompatibleTypeException("Incompatible Type Exception. " + var + " is not of type Generation").getMessage());
                 if (!field.equals("genotype")) System.out.println(new InaccessibleFieldException("Inaccessible Field Exception is occured. ").getMessage());
-                if(ctx.id() != null) {
+                if(ctx.id().size() != 0) {
                 Generation generation2 = (Generation) variables.get(var.toLowerCase());
                 Generation tmpgen = (Generation) variables.get(children.get(1).toLowerCase());
                     try {
@@ -254,9 +253,20 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                         e.printStackTrace();
                     }
                 } else{
+                    Generation generation2 = (Generation) variables.get(var.toLowerCase());
+                    //visitArray(ctx.array(), "generation");
+                    try {
+                        Generation tmpgen = (Generation) visitArray(ctx.array(), "parent");
+                        try {
+                            generation2.pred(tmpgen.getChildren());
+                        } catch (SemanticExceptions e) {
+                            e.printStackTrace();
+                        }
+                    } catch (SemanticExceptions e) {
+                        e.printStackTrace();
+                    }
 
                 }
-
                 break;
         }
 
@@ -267,9 +277,42 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
         return super.visitComputations(ctx);
     }
 
-    @Override
-    public T visitArray(GeneticsGrammarParser.ArrayContext ctx) {
-        return visitChildren(ctx);
+    public T visitArray(GeneticsGrammarParser.ArrayContext ctx, String type) throws SemanticExceptions {
+        List<String> children = new ArrayList<>();
+        for (ParseTree e : ctx.children ){
+            children.add(e.getText());
+        }
+        children = Arrays.asList(children.get(1).split(","));
+
+        if (type.equals("parent")){
+            List<Parent> genotype = new ArrayList<>();
+            for (String var: children) {
+                if (variables.containsKey(var.toLowerCase())) genotype.add((Parent) variables.get(var.toLowerCase()));
+                else {
+                    Parent tmp = new Parent();
+                    //If the genes havent been linked to the parent, links them
+                    if (tmp.getGenes() == null) {
+                        //Gets all available information about declared Genes
+                        List<Gene> g = new ArrayList<>();
+                        for (String k : variables.keySet()) {
+                            if (variables.get(k).getType().equals("gene")) g.add((Gene) variables.get(k));
+                        }
+                        Gene[] gen = new Gene[g.size()];
+                        //Notifies the parent about the genes that will be used
+                        tmp.setGenes(g.toArray(gen));
+                        //Locks the possibility of changing the genes
+                    }
+                    tmp.setValue("genotype", var);
+                    genotype.add(tmp);
+                }
+            }
+            Generation x = new Generation();
+            x.setValue("children", genotype);
+            return (T) x;
+        }
+
+       return super.visitArray(ctx);
+
     }
 
     @Override
