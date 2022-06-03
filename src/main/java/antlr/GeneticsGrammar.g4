@@ -46,6 +46,7 @@ PHENOTYPE: 'phenotype';
 CODOMINANCE: 'codominance';
 LOCATION: 'location';
 LABEL: 'label';
+PARENTS: 'ancestors';
 GENOTYPE: 'genotype';
 FREQUENCY: 'frequency';
 PUNNET: 'square';
@@ -77,7 +78,7 @@ statements: declaration | assigments | flow_structure | computations | io;
 
 id: alpanum+;
 declaration: type  id (','  id)?';';
-type: GENES | PARENT | GENERATION | DSLBOOLEAN | DSLNUMBER |DSLSTRING;
+type: GENES | PARENT | GENERATION | DSLBOOLEAN | DSLNUMBER | DSLSTRING;
 
 bool: TRUE | FALSE;
 string: STRING;
