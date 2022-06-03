@@ -10,9 +10,9 @@ import java.util.*;
 public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
     Map<String, IDataType> variables = new HashMap<>();
     static final String[] keywords = {"genes", "parents", "generation", "set", "dom", "phenotype", "codominance", "location",
-    "label", "genotype", "frequency", "square", "find", "cross", "pred", "estimate", "if", "then",
+    "label", "genotype", "frequency", "square", "find", "cross", "pred", "estimate", "if", "then", "from", "family","gen", "for",
     "else", "end", "while", "do", "print"};
-    static final String[] types = {"genes", "parents", "generation", "number", "boolean", "string"};
+    static final String[] types = {"genes", "parents", "generation", "number", "boolean", "string", "family"};
     static boolean parentAssignedFlag = false;
 
     @Override
@@ -44,6 +44,9 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                             break;
                         case "generation":
                             value = new Generation();
+                            break;
+                        case "family":
+                            value = new Family();
                             break;
                         case "number":
                             value = new DSLNumber();
@@ -150,6 +153,21 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                             }
                         }
                     }
+                    else if(temp.getType().equals("generation")){
+                        try {
+                            temp = (Generation) visitArray(ctx.expresion().array(), "parent");
+                        } catch (SemanticExceptions e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else if (temp.getType().equals("family"))  {
+                        Family fam1 = (Family) temp;
+                        try {
+                            fam1.setValue(children.get(1), (List<Generation>) visitArray(ctx.expresion().array(), "generation"));
+                        } catch (SemanticExceptions e) {
+                            e.printStackTrace();
+                        }
+                    }
                 } else {
                     System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(2)).getMessage());
                 }
@@ -242,23 +260,23 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                 }
                 break;
             case "pred":
-                if(!variables.get(var.toLowerCase()).getType().equals( "generation")) System.out.println(new IncompatibleTypeException("Incompatible Type Exception. " + var + " is not of type Generation").getMessage());
-                if (!field.equals("genotype")) System.out.println(new InaccessibleFieldException("Inaccessible Field Exception is occured. ").getMessage());
+                if(!variables.get(var.toLowerCase()).getType().equals( "family")) System.out.println(new IncompatibleTypeException("Incompatible Type Exception. " + var + " is not of type Generation").getMessage());
+                if (!field.equals("gen")) System.out.println(new InaccessibleFieldException("Inaccessible Field Exception is occured. ").getMessage());
                 if(ctx.id().size() != 0) {
-                Generation generation2 = (Generation) variables.get(var.toLowerCase());
+                Family fam2 = (Family) variables.get(var.toLowerCase());
                 Generation tmpgen = (Generation) variables.get(children.get(1).toLowerCase());
                     try {
-                        generation2.pred(tmpgen.getChildren());
+                        fam2.pred(tmpgen.getChildren());
                     } catch (SemanticExceptions e) {
                         e.printStackTrace();
                     }
                 } else{
-                    Generation generation2 = (Generation) variables.get(var.toLowerCase());
+                    Family fam2 = (Family) variables.get(var.toLowerCase());
                     //visitArray(ctx.array(), "generation");
                     try {
                         Generation tmpgen = (Generation) visitArray(ctx.array(), "parent");
                         try {
-                            generation2.pred(tmpgen.getChildren());
+                            fam2.pred(tmpgen.getChildren());
                         } catch (SemanticExceptions e) {
                             e.printStackTrace();
                         }
@@ -319,6 +337,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                     throw new IncompatibleTypeException("Incompatible Type Error is occured. " + var + " is not of type Generation.");
                 }
             }
+            return (T)genotype;
 
         }
 
@@ -343,6 +362,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                 case "parent":
                 case "number":
                 case "string":
+                case "family":
                 case "boolean":
                     temp.print();
                     break;
@@ -392,7 +412,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
         for (ParseTree e : ctx.children ){
             children.add(e.getText());
         }
-        System.out.println(ctx.statements().size());
+        System.out.println(children);
         return visitChildren(ctx); }
 
     @Override public T visitCondition(GeneticsGrammarParser.ConditionContext ctx) {

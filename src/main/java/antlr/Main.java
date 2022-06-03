@@ -14,6 +14,7 @@ public class Main {
                 "generation Fam;\n" +
                 "generation Fam2;\n" +
                 "number int1;\n" +
+                "family fam1;\n" +
                 "dom: A -> a;\n" +
                 "dom: B -> b;\n" +
                 "\n" +
@@ -27,9 +28,9 @@ public class Main {
                 "\n" +
                 "\n" +
                 "set genotype Fam = cross parent1 * parent2 ;\n" +
-                "print Fam2 genotype; \n" +
-                "set genotype Fam2 = pred [parent1, parent2] ;\n" +
-                "set genotype Fam2 = pred [aaBB, AABB, aaBb] ;\n" +
+                "print Fam genotype; \n" +
+                "set gen Fam1 = pred Fam;\n" +
+                "print fam1;\n" +
                 "set value int1 = estimate frequency Fam, bb;\n" +
                "set value int1 = estimate frequency Fam, bb 200 ;\n" +
                 "\n" +
@@ -40,15 +41,17 @@ public class Main {
                 "set value int1 = 5;\n" +
                 "else set value int2 = 4;\n" +
                 "end;\n" +
-//                "number int2;\n"+
-//                "set value int2 = 0;\n"+
-//                "while int2 < 10 do\n"+
-//                "set value int2 = int2 + 1; \n"+
-//                "end;\n"+
-                //"parents parent3;\n" +
-                //"for parent3 from Fam:\n" +
-                //"set genotype Fam2 = cross parent3 * parent1;\n" +
-                //"end;\n" +
+
+                "number int2;\n"+
+                "set value int2 = 0;\n"+
+                "while int2 < 10 do\n"+
+                "set value int2 = 10; \n"+
+                "end;\n"+
+
+                "parents parent3;\n" +
+                "for parent3 from Fam:\n" +
+                "set genotype Fam2 = cross parent3 * parent1;\n" +
+                "end;\n" +
                 "print parent1;\n"+
                 "print Fam square;\n" +
                 "print int1;\n" +
