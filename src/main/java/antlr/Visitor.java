@@ -310,6 +310,17 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
             x.setValue("children", genotype);
             return (T) x;
         }
+        else if (type.equals("generation")) {
+            List<Generation> genotype = new ArrayList<>();
+            for (String var : children) {
+                if (variables.containsKey(var.toLowerCase()))
+                    genotype.add((Generation) variables.get(var.toLowerCase()));
+                else {
+                    throw new IncompatibleTypeException("Incompatible Type Error is occured. " + var + " is not of type Generation.");
+                }
+            }
+
+        }
 
        return super.visitArray(ctx);
 
@@ -376,5 +387,19 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
        // System.out.println(children);
         return super.visitIo(ctx);
     }
+    @Override public T visitFlow_structure(GeneticsGrammarParser.Flow_structureContext ctx) {
+        List<String> children = new ArrayList<>();
+        for (ParseTree e : ctx.children ){
+            children.add(e.getText());
+        }
+        System.out.println(ctx.statements().size());
+        return visitChildren(ctx); }
 
+    @Override public T visitCondition(GeneticsGrammarParser.ConditionContext ctx) {
+        List<String> children = new ArrayList<>();
+        for (ParseTree e : ctx.children ){
+            children.add(e.getText());
+        }
+        System.out.println(children);
+        return visitChildren(ctx); }
 }

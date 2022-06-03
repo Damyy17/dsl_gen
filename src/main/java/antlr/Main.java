@@ -33,7 +33,22 @@ public class Main {
                 "set value int1 = estimate frequency Fam, bb;\n" +
                "set value int1 = estimate frequency Fam, bb 200 ;\n" +
                 "\n" +
-                "print parent1;\n"+
+                "number int2;\n" +
+                "set value int2 = 0;\n"+
+                "if int2<10 then \n" +
+                "set value int2 = 3;\n" +
+                "set value int1 = 5;\n" +
+                "else set value int2 = 4;\n" +
+                "end;\n" +
+//                "number int2;\n"+
+//                "set value int2 = 0;\n"+
+//                "while int2 < 10 do\n"+
+//                "set value int2 = int2 + 1; \n"+
+//                "end;\n"+
+                //"parents parent3;\n" +
+                //"for parent3 from Fam:\n" +
+                //"set genotype Fam2 = cross parent3 * parent1;\n" +
+                //"end;\n" +
                 "print parent1;\n"+
                 "print Fam square;\n" +
                 "print int1;\n" +

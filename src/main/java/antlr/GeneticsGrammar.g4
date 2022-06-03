@@ -112,9 +112,9 @@ computations: FIND field alpha+
 flow_structure: IF  condition  THEN  statements+?  ELSE  statements  END ';'
                 | condition '?' condition ':' statements ';'
                 | WHILE  condition  DO  statements+  END ';'
-//                | FOR iterator = id 'from' id ':'
-//                statements+
-//                END ';'
+                | FOR iterator = id 'from' id ':'
+                statements+
+                END ';'
                 ;
 
 condition: id operator id
