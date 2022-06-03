@@ -242,6 +242,20 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                 }
                 break;
             case "pred":
+                System.out.println(children);
+                if(!variables.get(var.toLowerCase()).getType().equals( "generation")) System.out.println(new IncompatibleTypeException("Incompatible Type Exception. " + var + " is not of type Generation").getMessage());
+                if (!field.equals("genotype")) System.out.println(new InaccessibleFieldException("Inaccessible Field Exception is occured. ").getMessage());
+                if(ctx.id() != null) {
+                Generation generation2 = (Generation) variables.get(var.toLowerCase());
+                Generation tmpgen = (Generation) variables.get(children.get(1).toLowerCase());
+                    try {
+                        generation2.pred(tmpgen.getChildren());
+                    } catch (SemanticExceptions e) {
+                        e.printStackTrace();
+                    }
+                } else{
+
+                }
 
                 break;
         }
@@ -265,7 +279,6 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
             children.add(e.getText());
         }
         if (!variables.containsKey(children.get(1).toLowerCase())) System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(1)).getMessage());
-        System.out.println(children);
         //
         if (children.size() <= 3){
             IDataType temp = variables.get(children.get(1).toLowerCase());

@@ -28,6 +28,53 @@ public class Generation implements IDataType{
         return square;
     }
 
+    public void pred(List<Parent> children) throws SemanticExceptions {
+        this.children = new ArrayList<>();
+        Map <String, Gene> g = new HashMap<>();
+        Gene[] sample = children.get(0).getGenes();
+        for (Gene gene : sample) {
+            g.put(gene.getRecessiveGene(), gene);
+        }
+        find("", g);
+        List<Parent> candidateparent1 = new ArrayList<>(this.children);
+        List<Parent> candidateparent2 = new ArrayList<>(this.children);
+
+        List<Parent[]> actualparents = new ArrayList<>();
+
+        Map<String, Integer> childfreq = new HashMap<>();
+
+        for (Parent p: children) {
+            if (childfreq.containsKey(p.getGenotype())) childfreq.put(p.getGenotype(), childfreq.get(p.getGenotype()) + 1);
+            else childfreq.put(p.getGenotype(), 1);
+        }
+
+        for (Parent dad : candidateparent1){
+            for (Parent mom : candidateparent2){
+                boolean improperFlag = false;
+                Generation g1 = new Generation();
+                Parent[] p = {dad, mom};
+                g1.setValue("parent", p);
+                g1.setValue("square", "");
+                g1.estimateFreq();
+                for (String gen: childfreq.keySet()) {
+                    if (!g1.getGenotypeFrequency().containsKey(gen) || g1.getGenotypeFrequency().get(gen) != childfreq.get(gen)){
+                        improperFlag = true;
+                        break;
+                    }
+                }
+                if (!improperFlag) {
+                    Parent[] p1 = {dad, mom};
+                    actualparents.add(p1);
+                };
+            }
+        }
+
+        for (Parent[] p: actualparents) {
+            System.out.println(p[0].getGenotype()+ " " + p[1].getGenotype());
+        }
+
+    }
+
     public Map<String, Integer> getGenotypeFrequency() {
         return genotypeFrequency;
     }
@@ -189,9 +236,11 @@ public class Generation implements IDataType{
             geno3.add(tmp.toString());
         }
         //Create children
+        this.children = new ArrayList<>();
         for (String s: geno3) {
             createParent(genes.values().toArray(new Gene[genes.size()]), s);
         }
+
     }
 
 
@@ -252,9 +301,14 @@ public class Generation implements IDataType{
         setParents(value);
     }
 
+    public void setValue(String field, List<Parent> children) {
+        this.children = children;
+    }
+
     @Override
     public void setValue(String field, String value) throws SemanticExceptions {
         if (field.equals("square") ||field.equals("genotype")) cross();
+        if (field.equals("children"))
         if (field.equals("frequency")) estimateFreq();
     }
 
