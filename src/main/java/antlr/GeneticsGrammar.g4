@@ -52,6 +52,7 @@ GENOTYPE: 'genotype';
 FREQUENCY: 'frequency';
 PUNNET: 'square';
 VALUE: 'value';
+GEN: 'gen';
 
 //computations
 FIND: 'find';
@@ -66,6 +67,7 @@ ELSE: 'else';
 END: 'end';
 WHILE: 'while';
 DO: 'do';
+FOR: 'for';
 
 //io
 ALL: 'all';
@@ -100,7 +102,7 @@ assigments: SET field id '=' expresion ';'
             | DOM ':'  id  '->'  id ';'
             | SET field id '='  computations ';';
 
-field: LABEL | PHENOTYPE | DOM | CODOMINANCE | LOCATION | GENOTYPE | FREQUENCY | PUNNET | VALUE | PARENTS;
+field: LABEL | PHENOTYPE | DOM | CODOMINANCE | LOCATION | GENOTYPE | FREQUENCY | PUNNET | VALUE | PARENTS | GEN;
 
 computations: FIND field alpha+
               | PRED id
@@ -109,9 +111,12 @@ computations: FIND field alpha+
               | ESTIMATE field id COMMA alpha+
               | CROSS id CROSS_OPERATION id ;
 
-flow_structure: IF  condition  THEN  statements+?  ELSE  statements  END ';'
+flow_structure: IF  condition  THEN  statements+?  ELSE  statements+  END ';'
                 | condition '?' statements ':' statements ';'
                 | WHILE  condition  DO  statements+  END ';'
+                | FOR iterator = id 'from' id ':'
+                      statements+
+                      END ';'
                 ;
 
 condition: id operator id
