@@ -32,6 +32,7 @@ OR: 'or';
 CROSS_OPERATION: '*';
 
 //types
+FAMILY: 'family';
 GENES: 'genes';
 PARENT: 'parents';
 GENERATION :'generation';
@@ -64,7 +65,6 @@ THEN: 'then';
 ELSE: 'else';
 END: 'end';
 WHILE: 'while';
-FOR: 'for';
 DO: 'do';
 
 //io
@@ -78,7 +78,7 @@ statements: declaration | assigments | flow_structure | computations | io;
 
 id: alpanum+;
 declaration: type  id (','  id)?';';
-type: GENES | PARENT | GENERATION | DSLBOOLEAN | DSLNUMBER | DSLSTRING;
+type: GENES | PARENT | GENERATION | DSLBOOLEAN | DSLNUMBER | DSLSTRING | FAMILY;
 
 bool: TRUE | FALSE;
 string: STRING;
@@ -110,11 +110,8 @@ computations: FIND field alpha+
               | CROSS id CROSS_OPERATION id ;
 
 flow_structure: IF  condition  THEN  statements+?  ELSE  statements  END ';'
-                | condition '?' condition ':' statements ';'
+                | condition '?' statements ':' statements ';'
                 | WHILE  condition  DO  statements+  END ';'
-//                | FOR iterator = id 'from' id ':'
-//                statements+
-//                END ';'
                 ;
 
 condition: id operator id
