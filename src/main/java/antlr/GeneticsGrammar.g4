@@ -101,8 +101,9 @@ assigments: SET field id '=' expresion ';'
 
 field: LABEL | PHENOTYPE | DOM | CODOMINANCE | LOCATION | GENOTYPE | FREQUENCY | PUNNET | VALUE;
 
-computations: FIND field id
-              | PRED id+
+computations: FIND field alpha+
+              | PRED id
+              | PRED array
               | ESTIMATE field id COMMA alpha+ number
               | ESTIMATE field id COMMA alpha+
               | CROSS id CROSS_OPERATION id ;
@@ -110,9 +111,9 @@ computations: FIND field id
 flow_structure: IF  condition  THEN  statements+?  ELSE  statements  END ';'
                 | condition '?' condition ':' statements ';'
                 | WHILE  condition  DO  statements+  END ';'
-                | FOR iterator = id 'from' id ':'
-                statements+
-                END ';'
+//                | FOR iterator = id 'from' id ':'
+//                statements+
+//                END ';'
                 ;
 
 condition: id operator id
