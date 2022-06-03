@@ -100,7 +100,7 @@ assigments: SET field id '=' expresion ';'
             | DOM ':'  id  '->'  id ';'
             | SET field id '='  computations ';';
 
-field: LABEL | PHENOTYPE | DOM | CODOMINANCE | LOCATION | GENOTYPE | FREQUENCY | PUNNET | VALUE;
+field: LABEL | PHENOTYPE | DOM | CODOMINANCE | LOCATION | GENOTYPE | FREQUENCY | PUNNET | VALUE | PARENTS;
 
 computations: FIND field alpha+
               | PRED id

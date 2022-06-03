@@ -1378,6 +1378,7 @@ public class GeneticsGrammarParser extends Parser {
 		public TerminalNode FREQUENCY() { return getToken(GeneticsGrammarParser.FREQUENCY, 0); }
 		public TerminalNode PUNNET() { return getToken(GeneticsGrammarParser.PUNNET, 0); }
 		public TerminalNode VALUE() { return getToken(GeneticsGrammarParser.VALUE, 0); }
+		public TerminalNode PARENTS() { return getToken(GeneticsGrammarParser.PARENTS, 0); }
 		public FieldContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1406,7 +1407,7 @@ public class GeneticsGrammarParser extends Parser {
 			{
 			setState(165);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << DOM) | (1L << PHENOTYPE) | (1L << CODOMINANCE) | (1L << LOCATION) | (1L << LABEL) | (1L << GENOTYPE) | (1L << FREQUENCY) | (1L << PUNNET) | (1L << VALUE))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << DOM) | (1L << PHENOTYPE) | (1L << CODOMINANCE) | (1L << LOCATION) | (1L << LABEL) | (1L << PARENTS) | (1L << GENOTYPE) | (1L << FREQUENCY) | (1L << PUNNET) | (1L << VALUE))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -1994,8 +1995,8 @@ public class GeneticsGrammarParser extends Parser {
 		"\u0016\u0001\u0016\u0003\u0016\u010c\b\u0016\u0001\u0016\u0001\u00d3\u0000"+
 		"\u0017\u0000\u0002\u0004\u0006\b\n\f\u000e\u0010\u0012\u0014\u0016\u0018"+
 		"\u001a\u001c\u001e \"$&(*,\u0000\u0005\u0001\u0000 %\u0001\u0000\u001b"+
-		"\u001c\u0001\u0000\u0017\u0018\u0002\u0000\u0003\b\u001d\u001e\u0002\u0000"+
-		"\'+-0\u011e\u0000/\u0001\u0000\u0000\u0000\u0002:\u0001\u0000\u0000\u0000"+
+		"\u001c\u0001\u0000\u0017\u0018\u0002\u0000\u0003\b\u001d\u001e\u0001\u0000"+
+		"\'0\u011e\u0000/\u0001\u0000\u0000\u0000\u0002:\u0001\u0000\u0000\u0000"+
 		"\u0004=\u0001\u0000\u0000\u0000\u0006A\u0001\u0000\u0000\u0000\bI\u0001"+
 		"\u0000\u0000\u0000\nK\u0001\u0000\u0000\u0000\fM\u0001\u0000\u0000\u0000"+
 		"\u000eO\u0001\u0000\u0000\u0000\u0010T\u0001\u0000\u0000\u0000\u0012["+
