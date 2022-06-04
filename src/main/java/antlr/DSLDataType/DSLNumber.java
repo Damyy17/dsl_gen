@@ -13,6 +13,10 @@ public class DSLNumber implements IDataType{
         return String.valueOf(value);
     }
 
+    public double getValue() {
+        return value;
+    }
+
     @Override
     public void print() {
         System.out.println(value);

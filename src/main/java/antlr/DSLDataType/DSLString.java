@@ -13,6 +13,10 @@ public class DSLString implements IDataType{
         return Double.parseDouble(value);
     }
 
+    public String getValue() {
+        return value;
+    }
+
     @Override
     public void print() {
         System.out.println(value);

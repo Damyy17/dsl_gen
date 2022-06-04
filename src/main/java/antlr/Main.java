@@ -36,7 +36,7 @@ public class Main {
                 "\n" +
                 "number int2;\n" +
                 "set value int2 = 0;\n"+
-                "if int2<10 then \n" +
+                "if int2<=10 then \n" +
                 "set value int2 = 3;\n" +
                 "set value int1 = 5;\n" +
                 "else set value int2 = 4;\n" +
