@@ -413,13 +413,71 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
             children.add(e.getText());
         }
         System.out.println(children);
-        return visitChildren(ctx); }
+        switch(children.get(0)){
+            case "if":
+                int trueStatement = children.indexOf("else") - children.indexOf("then");
+                DSLBoolean evalExpr = (DSLBoolean) visitCondition(ctx.condition());
+                if (evalExpr.getValue()) {
+                    for (int i = 0; i < trueStatement - 1; i++) {
+                        visitStatements(ctx.statements(i));
+                    }
+                }else {
+                    for (int i = trueStatement - 1; i < ctx.statements().size(); i++) {
+                        visitStatements(ctx.statements(i));
+                    }
+                }
+                break;
+            case "for":
+                if (!variables.containsKey(children.get(1).toLowerCase())) System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(1)).getMessage());
+                if (!variables.containsKey(children.get(3).toLowerCase())) System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(3)).getMessage());
+                if (variables.get(children.get(1).toLowerCase()).getType().equals("parent") && variables.get(children.get(3).toLowerCase()).getType().equals("generation")){
+                    Generation g1 = (Generation) variables.get(children.get(3).toLowerCase());
+                    for (Parent p: g1.getChildren()) {
+                        variables.put(children.get(1).toLowerCase(), p);
+                        for (int i = 0; i < ctx.statements().size(); i++) {
+                            visitStatements(ctx.statements(i));
+                        }
+                    }
+                }
+                else if (variables.get(children.get(1).toLowerCase()).getType().equals("generation") && variables.get(children.get(3).toLowerCase()).getType().equals("family")){
+                    Family f1 = (Family) variables.get(children.get(3).toLowerCase());
+                    for (Generation g: f1.getGen()) {
+                        variables.put(children.get(1).toLowerCase(), g);
+                        for (int i = 0; i < ctx.statements().size(); i++) {
+                            visitStatements(ctx.statements(i));
+                        }
+                    }
+                }
+                else System.out.println(new IncompatibleTypeException("Incompatible Type Exception is occured! " + children.get(1) + " or " + children.get(3) + " are of incompatible type for a for loop.").getMessage());
+
+                break;
+        }
+        return null;
+    }
 
     @Override public T visitCondition(GeneticsGrammarParser.ConditionContext ctx) {
         List<String> children = new ArrayList<>();
         for (ParseTree e : ctx.children ){
             children.add(e.getText());
         }
-        System.out.println(children);
-        return visitChildren(ctx); }
+        try {
+            return evaluateExpression(children);
+        } catch (SemanticExceptions e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public T evaluateExpression(List<String> children) throws SemanticExceptions {
+        DSLBoolean a = new DSLBoolean();
+        if (children.size() == 3){
+
+        }
+
+
+
+
+        a.setValue("value", "false");
+        return (T) a;
+    }
 }

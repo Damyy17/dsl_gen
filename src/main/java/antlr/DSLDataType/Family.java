@@ -2,11 +2,7 @@ package antlr.DSLDataType;
 
 import antlr.DSLExceptions.SemanticExceptions;
 
-import javax.sound.midi.Soundbank;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Family implements IDataType{
     private List<Generation> gen = new ArrayList<>();
