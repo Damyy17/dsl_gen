@@ -412,7 +412,6 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
         for (ParseTree e : ctx.children ){
             children.add(e.getText());
         }
-        System.out.println(children);
         switch(children.get(0)){
             case "if":
                 int trueStatement = children.indexOf("else") - children.indexOf("then");

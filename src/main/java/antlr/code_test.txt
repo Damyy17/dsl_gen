@@ -1,7 +1,9 @@
 genes a, b;
 parents parent1, parent2;
-generation F1;
-
+generation Fam;
+generation Fam2;
+number int1;
+family fam1;
 dom: A -> a;
 dom: B -> b;
 
@@ -10,14 +12,28 @@ set label a = "Blue eyes";
 set label B = "Brown hair";
 set label b = "Blond hair";
 
-set genotype parent1 = AaBb;
+set genotype parent1 = aabb;
 set genotype parent2 = AaBb;
 
-set genotype l1 = find genotype bb;
 
-set genotype F1 = cross parent1 * parent2;
+set genotype Fam = cross parent1 * parent2 ;
+set gen Fam1 = pred Fam;
+set value int1 = estimate frequency Fam, bb;
+set value int1 = estimate frequency Fam, bb 200 ;
 
-set genotype F1 = estimate frequency F1 bb 200;
-
-print F1 square;
-print F1 frequency bb;
+number int2;
+set value int2 = 0;
+if int2<=10 then
+set value int2 = 3;
+set value int1 = 5;
+else set value int2 = 4;
+end;
+parents parent3;
+for parent3 from Fam:
+set genotype Fam2 = cross parent3 * parent1;
+end;
+print parent1;
+print Fam square;
+print Fam ancestors;
+print int1;
+print Fam frequency bb;

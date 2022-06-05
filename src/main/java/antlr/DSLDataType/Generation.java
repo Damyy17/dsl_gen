@@ -217,7 +217,7 @@ public class Generation implements IDataType{
                 p.print();
             }
         }
-        else if(field.equals("parents")){
+        else if(field.equals("ancestors")){
             for (Parent p: this.parents) {
                 p.print();
             }
@@ -266,7 +266,6 @@ public class Generation implements IDataType{
     @Override
     public void setValue(String field, String value) throws SemanticExceptions {
         if (field.equals("square") ||field.equals("genotype")) cross();
-        if (field.equals("children"))
         if (field.equals("frequency")) estimateFreq();
     }
 
