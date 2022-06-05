@@ -1,5 +1,6 @@
 // Generated from D:/HW University/Year2/PBL_4/dsl_gen/src/main/java/antlr\GeneticsGrammar.g4 by ANTLR 4.10.1
 package antlr;
+import antlr.DSLExceptions.*;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -383,8 +384,17 @@ public class GeneticsGrammarParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GeneticsGrammarVisitor ) return ((GeneticsGrammarVisitor<? extends T>)visitor).visitDeclaration(this);
+			if ( visitor instanceof GeneticsGrammarVisitor ) {
+				try {
+					return ((GeneticsGrammarVisitor<? extends T>)visitor).visitDeclaration(this);
+				} catch (ReservedKeywordException e) {
+					e.printStackTrace();
+				} catch (NonexistentTypeException e) {
+					e.printStackTrace();
+				}
+			}
 			else return visitor.visitChildren(this);
+		return null;
 		}
 	}
 
@@ -1297,8 +1307,16 @@ public class GeneticsGrammarParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GeneticsGrammarVisitor ) return ((GeneticsGrammarVisitor<? extends T>)visitor).visitAssigments(this);
+			if ( visitor instanceof GeneticsGrammarVisitor ) {
+				try {
+					return ((GeneticsGrammarVisitor<? extends T>)visitor).visitAssigments(this);
+				} catch (SemanticExceptions e) {
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+				}
+			}
 			else return visitor.visitChildren(this);
+		return null;
 		}
 	}
 
@@ -1664,8 +1682,17 @@ public class GeneticsGrammarParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GeneticsGrammarVisitor ) return ((GeneticsGrammarVisitor<? extends T>)visitor).visitFlow_structure(this);
+			if ( visitor instanceof GeneticsGrammarVisitor ) {
+				try {
+					return ((GeneticsGrammarVisitor<? extends T>)visitor).visitFlow_structure(this);
+				} catch (UndeclaredVariableException e) {
+					e.printStackTrace();
+				} catch (IncompatibleTypeException e) {
+					e.printStackTrace();
+				}
+			}
 			else return visitor.visitChildren(this);
+			return null;
 		}
 	}
 
@@ -1928,8 +1955,19 @@ public class GeneticsGrammarParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GeneticsGrammarVisitor ) return ((GeneticsGrammarVisitor<? extends T>)visitor).visitIo(this);
+			if ( visitor instanceof GeneticsGrammarVisitor ) {
+				try {
+					return ((GeneticsGrammarVisitor<? extends T>)visitor).visitIo(this);
+				} catch (UndeclaredVariableException e) {
+					e.printStackTrace();
+				} catch (NonexistentTypeException e) {
+					e.printStackTrace();
+				} catch (IncompatibleTypeException e) {
+					e.printStackTrace();
+				}
+			}
 			else return visitor.visitChildren(this);
+			return null;
 		}
 	}
 

@@ -1,7 +1,7 @@
 genes a, b;
 parents parent1, parent2;
-generation Fam;
-generation Fam2;
+generation Fam5;
+generation Fam6;
 number int1;
 family fam1;
 dom: A -> a;

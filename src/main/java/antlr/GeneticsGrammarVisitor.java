@@ -1,5 +1,6 @@
 // Generated from D:/HW University/Year2/PBL_4/dsl_gen/src/main/java/antlr\GeneticsGrammar.g4 by ANTLR 4.10.1
 package antlr;
+import antlr.DSLExceptions.*;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -33,7 +34,7 @@ public interface GeneticsGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDeclaration(GeneticsGrammarParser.DeclarationContext ctx);
+	T visitDeclaration(GeneticsGrammarParser.DeclarationContext ctx) throws ReservedKeywordException, NonexistentTypeException;
 	/**
 	 * Visit a parse tree produced by {@link GeneticsGrammarParser#type}.
 	 * @param ctx the parse tree
@@ -117,7 +118,7 @@ public interface GeneticsGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAssigments(GeneticsGrammarParser.AssigmentsContext ctx);
+	T visitAssigments(GeneticsGrammarParser.AssigmentsContext ctx) throws SemanticExceptions;
 	/**
 	 * Visit a parse tree produced by {@link GeneticsGrammarParser#field}.
 	 * @param ctx the parse tree
@@ -135,7 +136,7 @@ public interface GeneticsGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFlow_structure(GeneticsGrammarParser.Flow_structureContext ctx);
+	T visitFlow_structure(GeneticsGrammarParser.Flow_structureContext ctx) throws UndeclaredVariableException, IncompatibleTypeException;
 	/**
 	 * Visit a parse tree produced by {@link GeneticsGrammarParser#condition}.
 	 * @param ctx the parse tree
@@ -147,5 +148,5 @@ public interface GeneticsGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIo(GeneticsGrammarParser.IoContext ctx);
+	T visitIo(GeneticsGrammarParser.IoContext ctx) throws UndeclaredVariableException, NonexistentTypeException, IncompatibleTypeException;
 }

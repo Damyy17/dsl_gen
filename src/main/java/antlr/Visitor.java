@@ -20,8 +20,11 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
         return super.visitChildren(node);
     }
 
+    @Override public T visitStatements(GeneticsGrammarParser.StatementsContext ctx) {
+        return visitChildren(ctx);}
+
     @Override
-    public T visitDeclaration(GeneticsGrammarParser.DeclarationContext ctx) {
+    public T visitDeclaration(GeneticsGrammarParser.DeclarationContext ctx) throws ReservedKeywordException, NonexistentTypeException {
         IDataType value = null;
         List<String> child = new ArrayList<String>();
 
@@ -31,7 +34,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
         }
 
         if (!Arrays.asList(types).contains(child.get(0)))
-            System.out.println(new NonexistentTypeException("Nonexistent Type Exception is occurred!" + child.get(0)).getMessage());
+            throw new NonexistentTypeException("Nonexistent Type Exception is occurred! " + ctx.getText() + ". " + child.get(0));
         else {
             for (String s : child.subList(1, child.size())) {
                 if (Arrays.asList(types).contains(child.get(0))) {
@@ -61,13 +64,13 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                     if (!Arrays.asList(keywords).contains(s))
                         variables.put(s.toLowerCase(), value);
                     else
-                        System.out.println(new ReservedKeywordException("Reserved Keyword Exception is occurred! " + s).getMessage());
+                        throw new ReservedKeywordException("Reserved Keyword Exception is occurred! " + ctx.getText() + ". " + s);
                 }
             }
         }
 
-//        System.out.println(child);
-//        System.out.println(variables);
+//        throw child);
+//        throw variables);
         return super.visitDeclaration(ctx);
     }
 
@@ -77,7 +80,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
     }
 
     @Override
-    public T visitAssigments(GeneticsGrammarParser.AssigmentsContext ctx) {
+    public T visitAssigments(GeneticsGrammarParser.AssigmentsContext ctx) throws SemanticExceptions {
         List<String> children = new ArrayList<String>();
         for (ParseTree e : ctx.children ){
             children.add(e.getText());
@@ -89,7 +92,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                 //Checks if variable is declared
                 if (variables.containsKey(children.get(2).toLowerCase())){
                     //Checks if its not trying to change gene after parent is assigned
-                    if (parentAssignedFlag) System.out.println(new SemanticExceptions("Illegal Gene Modification. Parent Assignment started").getMessage());
+                    if (parentAssignedFlag) throw new SemanticExceptions("Illegal Gene Modification. Parent Assignment started. " + ctx.getText() + ". ");
                     //Gets the object attached to the variable
                     IDataType temp = variables.get(children.get(2).toLowerCase());
                     try {
@@ -97,10 +100,10 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                         temp.setValue("dom", children.get(2));
                         temp.setValue("rec", children.get(4));
                     } catch (SemanticExceptions e) {
-                        e.printStackTrace();
+                        throw e;
                     }
                 }else{
-                    System.out.println(new UndeclaredVariableException("Undeclared Variable Exception. " + children.get(2)).getMessage());
+                    throw new UndeclaredVariableException("Undeclared Variable Exception. " + ctx.getText() + ". " + children.get(2) + "hasn't been declared.");
                 }
                 //If its standard variable assignment
             } else if(Objects.equals(children.get(0), "set")){
@@ -135,7 +138,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                     //If its standard set for gene
                     else if (temp.getType().equals("gene"))  {
                         //Checks if gene assignment isnt locked
-                        if (parentAssignedFlag) System.out.println(new SemanticExceptions("Illegal Gene Modification Exception. Parent assignment started.").getMessage());
+                        if (parentAssignedFlag) throw new SemanticExceptions("Illegal Gene Modification Exception. Parent assignment started. " + ctx.getText() + ". ");
                         //If the field set is label, sends both the label and the Allele as a value to setValye
                         if (Objects.equals(children.get(1), "label")) {
                             try {
@@ -169,7 +172,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                         }
                     }
                 } else {
-                    System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(2)).getMessage());
+                    throw new UndeclaredVariableException("Undeclared variable exception. " + ctx.getText() + ". " + children.get(2) + " hasn't been declared.");
                 }
             }
        }
@@ -177,26 +180,26 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
             if (variables.containsKey(children.get(2).toLowerCase())){
                 visitComputations(ctx.computations(), children.get(2), children.get(1));
             }else{
-                System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(2)).getMessage());
+                throw new UndeclaredVariableException("Undeclared variable exception. " + ctx.getText() + ". " + children.get(2)+ " hasn't been declared.");
             }
         }
 
-//        System.out.println(children);
+//        throw children);
         return super.visitAssigments(ctx);
     }
-    public void visitComputations(GeneticsGrammarParser.ComputationsContext ctx, String var, String field) {
+    public void visitComputations(GeneticsGrammarParser.ComputationsContext ctx, String var, String field) throws UndeclaredVariableException, IncompatibleTypeException, InaccessibleFieldException, IncorrectGenotypeFormatException {
         List<String> children = new ArrayList<>();
         for (ParseTree e : ctx.children ){
             children.add(e.getText());
         }
         switch (children.get(0)){
             case "cross":
-                if (!variables.containsKey(children.get(1).toLowerCase())) System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(1)).getMessage());
-                if (!variables.containsKey(children.get(3).toLowerCase())) System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(3)).getMessage());
+                if (!variables.containsKey(children.get(1).toLowerCase())) throw new UndeclaredVariableException("Undeclared variable exception. "  + ctx.getText() + ". " + children.get(1)+ " hasn't been declared.");
+                if (!variables.containsKey(children.get(3).toLowerCase())) throw new UndeclaredVariableException("Undeclared variable exception. " + ctx.getText() + ". " + children.get(3)+ " hasn't been declared.");
 
-                if(!variables.get(var.toLowerCase()).getType().equals( "generation")) System.out.println(new IncompatibleTypeException("Incompatible Type Exception. " + var + " is not of type Generation").getMessage());
-                if(!variables.get(children.get(1).toLowerCase()).getType().equals("parent")) System.out.println(new IncompatibleTypeException("Incompatible Type Exception. " + children.get(1) + " is not of type Parent").getMessage());
-                if(!variables.get(children.get(3).toLowerCase()).getType().equals("parent")) System.out.println(new IncompatibleTypeException("Incompatible Type Exception. " + children.get(3) + " is not of type Parent").getMessage());
+                if(!variables.get(var.toLowerCase()).getType().equals( "generation")) throw new IncompatibleTypeException("Incompatible Type Exception. " + ctx.getText() + ". " + var + " is not of type Generation");
+                if(!variables.get(children.get(1).toLowerCase()).getType().equals("parent")) throw new IncompatibleTypeException("Incompatible Type Exception. " + ctx.getText() + ". " + children.get(1) + " is not of type Parent");
+                if(!variables.get(children.get(3).toLowerCase()).getType().equals("parent")) throw new IncompatibleTypeException("Incompatible Type Exception. " + ctx.getText() + ". " + children.get(3) + " is not of type Parent");
 
                 Generation tmp = (Generation) variables.get(var.toLowerCase());
                 Parent[] p = {(Parent) variables.get(children.get(1).toLowerCase()), (Parent) variables.get(children.get(3).toLowerCase())};
@@ -209,9 +212,9 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                 break;
             case "estimate":
 
-                if (!variables.containsKey(children.get(2).toLowerCase())) System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(2)).getMessage());
-                if(!variables.get(var.toLowerCase()).getType().equals( "number")) System.out.println(new IncompatibleTypeException("Incompatible Type Exception. " + var + " is not of type Number").getMessage());
-                if(!variables.get(children.get(2).toLowerCase()).getType().equals("generation")) System.out.println(new IncompatibleTypeException("Incompatible Type Exception. " + children.get(2) + " is not of type Generation").getMessage());
+                if (!variables.containsKey(children.get(2).toLowerCase())) throw new UndeclaredVariableException("Undeclared variable exception. " + ctx.getText() + ". " +children.get(2)+ " hasn't been declared.");
+                if(!variables.get(var.toLowerCase()).getType().equals( "number")) throw new IncompatibleTypeException("Incompatible Type Exception. " + ctx.getText() + ". " +var + " is not of type Number");
+                if(!variables.get(children.get(2).toLowerCase()).getType().equals("generation")) throw new IncompatibleTypeException("Incompatible Type Exception. " + ctx.getText() + ". " +children.get(2) + " is not of type Generation");
 
                 StringBuilder alpha = new StringBuilder();
                 //Finds all the strings that dont contain a number
@@ -242,8 +245,8 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                 }
                 break;
             case "find":
-                if(!variables.get(var.toLowerCase()).getType().equals( "generation")) System.out.println(new IncompatibleTypeException("Incompatible Type Exception. " + var + " is not of type Generation").getMessage());
-                if (!children.get(1).equals("genotype")) System.out.println(new InaccessibleFieldException("Inaccessible Field Exception is occured. " +var + " is not a field used for this operation").getMessage());
+                if(!variables.get(var.toLowerCase()).getType().equals( "generation")) throw new IncompatibleTypeException("Incompatible Type Exception. "  +  ctx.getText() + ". " + var + " is not of type Generation");
+                if (!children.get(1).equals("genotype")) throw new InaccessibleFieldException("Inaccessible Field Exception is occured. " + ctx.getText() + ". " +var + " is not a field used for this operation");
                 Generation generation1 = (Generation) variables.get(var.toLowerCase());
                 StringBuilder alpha1 = new StringBuilder();
                 for (int j = 2; j < children.size(); j++) {
@@ -256,12 +259,12 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                 try {
                     generation1.find(alpha1.toString(), tmpgene);
                 } catch (SemanticExceptions e) {
-                    System.out.println(e.getMessage());
+                    throw e;
                 }
                 break;
             case "pred":
-                if(!variables.get(var.toLowerCase()).getType().equals( "family")) System.out.println(new IncompatibleTypeException("Incompatible Type Exception. " + var + " is not of type Generation").getMessage());
-                if (!field.equals("gen")) System.out.println(new InaccessibleFieldException("Inaccessible Field Exception is occured. ").getMessage());
+                if(!variables.get(var.toLowerCase()).getType().equals( "family")) throw new IncompatibleTypeException("Incompatible Type Exception. " + ctx.getText() + ". " + var + " is not of type Generation");
+                if (!field.equals("gen")) throw new InaccessibleFieldException("Inaccessible Field Exception is occured. " + ctx.getText() + ". " );
                 if(ctx.id().size() != 0) {
                 Family fam2 = (Family) variables.get(var.toLowerCase());
                 Generation tmpgen = (Generation) variables.get(children.get(1).toLowerCase());
@@ -334,7 +337,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                 if (variables.containsKey(var.toLowerCase()))
                     genotype.add((Generation) variables.get(var.toLowerCase()));
                 else {
-                    throw new IncompatibleTypeException("Incompatible Type Error is occured. " + var + " is not of type Generation.");
+                    throw new IncompatibleTypeException("Incompatible Type Error is occured. "  + ctx.getText() + ". " + var + " is not of type Generation.");
                 }
             }
             return (T)genotype;
@@ -346,12 +349,12 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
     }
 
     @Override
-    public T visitIo(GeneticsGrammarParser.IoContext ctx) {
+    public T visitIo(GeneticsGrammarParser.IoContext ctx) throws UndeclaredVariableException, NonexistentTypeException, IncompatibleTypeException {
         List<String> children = new ArrayList<>();
         for (ParseTree e : ctx.children ){
             children.add(e.getText());
         }
-        if (!variables.containsKey(children.get(1).toLowerCase())) System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(1)).getMessage());
+        if (!variables.containsKey(children.get(1).toLowerCase())) throw new UndeclaredVariableException("Undeclared variable exception. " + ctx.getText() + ". " + children.get(1)+ " hasn't been declared.");
         //
         if (children.size() <= 3){
             IDataType temp = variables.get(children.get(1).toLowerCase());
@@ -367,7 +370,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                     temp.print();
                     break;
                 default:
-                    System.out.println(new NonexistentTypeException("Nonexistent Type Exception is occurred").getMessage());
+                    throw new NonexistentTypeException("Nonexistent Type Exception is occurred. " + ctx.getText() + ". " );
             }
         } else if (children.size() <= 4){
             IDataType temp = variables.get(children.get(1).toLowerCase());
@@ -390,7 +393,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                     temp.print();
                     break;
                 default:
-                    System.out.println(new NonexistentTypeException("Nonexistent Type Exception is occurred!").getMessage());
+                    throw new NonexistentTypeException("Nonexistent Type Exception is occurred!" + ctx.getText() + ". ");
             }
         } else {
             IDataType temp = variables.get(children.get(1).toLowerCase());
@@ -401,13 +404,13 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                 Generation generation = (Generation) variables.get(children.get(1).toLowerCase());
                 generation.print(children.get(2), alpha.toString());
             } else {
-                System.out.println(new IncompatibleTypeException("Incompatible Type Exception is occurred!").getMessage());
+                throw new IncompatibleTypeException("Incompatible Type Exception is occurred! " +ctx.getText() + ". " );
             }
         }
-       // System.out.println(children);
+       // throw children);
         return super.visitIo(ctx);
     }
-    @Override public T visitFlow_structure(GeneticsGrammarParser.Flow_structureContext ctx) {
+    @Override public T visitFlow_structure(GeneticsGrammarParser.Flow_structureContext ctx) throws UndeclaredVariableException, IncompatibleTypeException {
         List<String> children = new ArrayList<>();
         for (ParseTree e : ctx.children ){
             children.add(e.getText());
@@ -427,8 +430,8 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                 }
                 break;
             case "for":
-                if (!variables.containsKey(children.get(1).toLowerCase())) System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(1)).getMessage());
-                if (!variables.containsKey(children.get(3).toLowerCase())) System.out.println(new UndeclaredVariableException("Undeclared variable exception. " + children.get(3)).getMessage());
+                if (!variables.containsKey(children.get(1).toLowerCase())) throw new UndeclaredVariableException("Undeclared variable exception. " + ctx.getText() + ". " +children.get(1)+ " hasn't been declared.");
+                if (!variables.containsKey(children.get(3).toLowerCase())) throw new UndeclaredVariableException("Undeclared variable exception. " + ctx.getText() + ". " + children.get(3)+ " hasn't been declared.");
                 if (variables.get(children.get(1).toLowerCase()).getType().equals("parent") && variables.get(children.get(3).toLowerCase()).getType().equals("generation")){
                     Generation g1 = (Generation) variables.get(children.get(3).toLowerCase());
                     for (Parent p: g1.getChildren()) {
@@ -447,7 +450,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                         }
                     }
                 }
-                else System.out.println(new IncompatibleTypeException("Incompatible Type Exception is occured! " + children.get(1) + " or " + children.get(3) + " are of incompatible type for a for loop.").getMessage());
+                else throw new IncompatibleTypeException("Incompatible Type Exception is occured! " + ctx.getText() + ". " + children.get(1) + " or " + children.get(3) + " are of incompatible type for a for loop.");
 
                 break;
         }
@@ -482,7 +485,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                             try {
                                 a.setValue("value", evaluateNumbers(firstn.getValue(), Double.parseDouble(children.get(2)), children.get(1)));
                             } catch (Exception e) {
-                                throw new IncompatibleTypeException("Incompatible Type Exception is occured! " + children.get(2) + " is not comparable to " + children.get(0));
+                                throw new IncompatibleTypeException("Incompatible Type Exception is occured! " +  children.get(2) + " is not comparable to " + children.get(0));
                             }
                             break;
                     case "boolean":

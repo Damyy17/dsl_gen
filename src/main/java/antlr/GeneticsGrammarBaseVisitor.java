@@ -1,5 +1,6 @@
 // Generated from D:/HW University/Year2/PBL_4/dsl_gen/src/main/java/antlr\GeneticsGrammar.g4 by ANTLR 4.10.1
 package antlr;
+import antlr.DSLExceptions.*;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
@@ -38,7 +39,7 @@ public class GeneticsGrammarBaseVisitor<T> extends AbstractParseTreeVisitor<T> i
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDeclaration(GeneticsGrammarParser.DeclarationContext ctx) { return visitChildren(ctx); }
+	@Override public T visitDeclaration(GeneticsGrammarParser.DeclarationContext ctx) throws ReservedKeywordException, NonexistentTypeException { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -136,7 +137,7 @@ public class GeneticsGrammarBaseVisitor<T> extends AbstractParseTreeVisitor<T> i
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAssigments(GeneticsGrammarParser.AssigmentsContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAssigments(GeneticsGrammarParser.AssigmentsContext ctx) throws SemanticExceptions { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -157,7 +158,7 @@ public class GeneticsGrammarBaseVisitor<T> extends AbstractParseTreeVisitor<T> i
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitFlow_structure(GeneticsGrammarParser.Flow_structureContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFlow_structure(GeneticsGrammarParser.Flow_structureContext ctx) throws UndeclaredVariableException, IncompatibleTypeException { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -171,5 +172,5 @@ public class GeneticsGrammarBaseVisitor<T> extends AbstractParseTreeVisitor<T> i
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitIo(GeneticsGrammarParser.IoContext ctx) { return visitChildren(ctx); }
+	@Override public T visitIo(GeneticsGrammarParser.IoContext ctx) throws UndeclaredVariableException, NonexistentTypeException, IncompatibleTypeException { return visitChildren(ctx); }
 }

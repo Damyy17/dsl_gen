@@ -14,6 +14,7 @@ public class Main {
         StringBuilder inputCode = new StringBuilder();
         try {
             File myObj = new File(args[0]);
+            //File myObj = new File("C:\\Users\\Lina\\Documents\\dsl_gen\\src\\main\\java\\antlr\\code_test.txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 inputCode.append(myReader.nextLine());
