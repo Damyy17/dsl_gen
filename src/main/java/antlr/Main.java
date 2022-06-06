@@ -10,6 +10,10 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) throws IOException, Exception {
+        //UI
+        GenUI genUI = new GenUI();
+        String input = genUI.getCodeText();
+
         if (args.length == 0) {System.out.println("Please input code file");return;}
         StringBuilder inputCode = new StringBuilder();
         try {
@@ -24,6 +28,7 @@ public class Main {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
+
         CharStream codeExample = CharStreams.fromString(String.valueOf(inputCode));
         GeneticsGrammarLexer lexer = new GeneticsGrammarLexer(codeExample);
         GeneticsGrammarParser parser = new GeneticsGrammarParser(new CommonTokenStream(lexer));

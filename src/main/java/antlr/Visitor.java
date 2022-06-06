@@ -20,6 +20,13 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
         return super.visitChildren(node);
     }
 
+    public T visitProgram(GeneticsGrammarParser.ProgramContext ctx){
+        visitChildren(ctx);
+        InputInfo inputInfo = new InputInfo();
+        inputInfo.addToList(ctx.getText());
+        return (T) inputInfo;
+    }
+
     @Override public T visitStatements(GeneticsGrammarParser.StatementsContext ctx) {
         return visitChildren(ctx);}
 

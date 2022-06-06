@@ -35,6 +35,7 @@ public class GenUI extends JFrame{
         lines.setEditable(false);
 //        lines.setFont(new Font("Monospaced", 12, Font.PLAIN));
 
+        //code section
         codeWrite.getDocument().addDocumentListener(new DocumentListener(){
             public String getText(){
                 int caretPosition = codeWrite.getDocument().getLength();
@@ -60,6 +61,7 @@ public class GenUI extends JFrame{
                 lines.setText(getText());
             }
         });
+
         //scroll
         scrollPane.getViewport().add(codeWrite);
         scrollPane.setRowHeaderView(lines);
@@ -100,7 +102,8 @@ public class GenUI extends JFrame{
 
     }
 
-    public static void main(String[] args) {
-        GenUI genUI = new GenUI();
+    public String getCodeText(){
+        return codeWrite.getText();
     }
+
 }
