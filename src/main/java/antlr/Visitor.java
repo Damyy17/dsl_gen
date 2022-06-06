@@ -9,6 +9,7 @@ import java.util.*;
 
 public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
     Map<String, IDataType> variables = new HashMap<>();
+    InputInfo inputInfo;
     static final String[] keywords = {"genes", "parents", "generation", "set", "dom", "phenotype", "codominance", "location",
     "label", "genotype", "frequency", "square", "find", "cross", "pred", "estimate", "if", "then", "from", "family","gen", "for",
     "else", "end", "while", "do", "print"};
@@ -21,10 +22,9 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
     }
 
     public T visitProgram(GeneticsGrammarParser.ProgramContext ctx){
-        visitChildren(ctx);
         InputInfo inputInfo = new InputInfo();
-        inputInfo.addToList(ctx.getText());
-        return (T) inputInfo;
+        visitChildren(ctx);
+        return (T) inputInfo.getAllOutput();
     }
 
     @Override public T visitStatements(GeneticsGrammarParser.StatementsContext ctx) {
@@ -356,7 +356,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
     }
 
     @Override
-    public T visitIo(GeneticsGrammarParser.IoContext ctx) throws UndeclaredVariableException, NonexistentTypeException, IncompatibleTypeException {
+    public T visitIo(GeneticsGrammarParser.IoContext ctx) throws UndeclaredVariableException, NonexistentTypeException, IncompatibleTypeException, NonexistentFieldException {
         List<String> children = new ArrayList<>();
         for (ParseTree e : ctx.children ){
             children.add(e.getText());
@@ -368,14 +368,24 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
             //in dependence of data type print the value of variable
             switch (temp.getType()){
                 case "gene":
-                case "generation":
                 case "parent":
                 case "number":
                 case "string":
-                case "family":
                 case "boolean":
-                    temp.print();
+                    inputInfo.addToOutput(temp.print());
                     break;
+                case "generation":
+                    Generation gtmp = (Generation) temp;
+                    inputInfo.addToPunnet(gtmp.printSquare());
+                    break;
+                case "family":
+                    Family ftmp = (Family) temp;
+                    List<List<List<String>>> squarelist =  ftmp.printSquares();
+                    for (List<List<String>> square: squarelist) {
+                        inputInfo.addToPunnet(square);
+                    }
+                    break;
+
                 default:
                     throw new NonexistentTypeException("Nonexistent Type Exception is occurred. " + ctx.getText() + ". " );
             }
@@ -384,20 +394,32 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
             switch (temp.getType()){
                 case "gene":
                     Gene gene = (Gene) variables.get(children.get(1).toLowerCase());
-                    gene.print(children.get(2));
+                    inputInfo.addToOutput(gene.print(children.get(2)));
                     break;
                 case "generation":
                     Generation generation = (Generation) variables.get(children.get(1).toLowerCase());
-                    generation.print(children.get(2));
+                    if (children.get(2).equals("square")) inputInfo.addToPunnet(generation.printSquare());
+                    else inputInfo.addToOutput(generation.print(children.get(2)));
                     break;
                 case "parent":
                     Parent parent = (Parent) variables.get(children.get(1).toLowerCase());
-                    parent.print(children.get(2));
+                    inputInfo.addToOutput(parent.print(children.get(2)));
+                    break;
+                case "family":
+                    Family family = (Family) variables.get(children.get(1).toLowerCase());
+                    if (children.get(2).equals("square")){
+                        List<List<List<String>>> squarelist =  family.printSquares();
+                        for (List<List<String>> square: squarelist) {
+                            inputInfo.addToPunnet(square);
+                        }
+                    } else {
+                        inputInfo.addToOutput(family.print(children.get(2)));
+                    }
                     break;
                 case "number":
                 case "string":
                 case "boolean":
-                    temp.print();
+                    inputInfo.addToOutput(temp.print());
                     break;
                 default:
                     throw new NonexistentTypeException("Nonexistent Type Exception is occurred!" + ctx.getText() + ". ");

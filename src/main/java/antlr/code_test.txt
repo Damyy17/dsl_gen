@@ -1,7 +1,7 @@
 genes a, b;
 parents parent1, parent2;
-generation Fam5;
-generation Fam6;
+generation Fam;
+generation Fam2;
 number int1;
 family fam1;
 dom: A -> a;
@@ -18,6 +18,7 @@ set genotype parent2 = AaBb;
 
 set genotype Fam = cross parent1 * parent2 ;
 set gen Fam1 = pred Fam;
+print Fam1;
 set value int1 = estimate frequency Fam, bb;
 set value int1 = estimate frequency Fam, bb 200 ;
 

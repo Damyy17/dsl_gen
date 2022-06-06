@@ -1,5 +1,6 @@
 package antlr.DSLDataType;
 
+import antlr.DSLExceptions.NonexistentFieldException;
 import antlr.DSLExceptions.SemanticExceptions;
 
 import java.util.*;
@@ -16,14 +17,24 @@ public class Family implements IDataType{
     }
 
     @Override
-    public void print() {
-        for (Generation g: this.gen) {
-            System.out.println("Parents:");
-            g.print("parents");
-            System.out.println("Children");
-            g.print("genotype");
-        }
+    //
+    public String print() throws NonexistentFieldException {
+        return "";
     }
+    public String print(String field) throws NonexistentFieldException {
+        StringBuilder builder = new StringBuilder();
+        if (field.equals("genotype")) for (Generation g: this.gen) builder.append(g.print("genotype"));
+        else if (field.equals("ancestors")) for (Generation g: this.gen) builder.append(g.print("ancestors"));
+        return builder.toString();
+    }
+    public List<List<List<String>>> printSquares(){
+        List<List<List<String>>> squarelist = new ArrayList<>();
+        for (Generation g: this.gen) {
+            squarelist.add(g.printSquare());
+        }
+        return squarelist;
+    }
+
     public void setValue(String field, List<Generation> gen){
         this.gen = gen;
     }
@@ -61,7 +72,7 @@ public class Family implements IDataType{
                 g1.setValue("square", "");
                 g1.estimateFreq();
                 for (String gen: childfreq.keySet()) {
-                    if (!g1.getGenotypeFrequency().containsKey(gen) || g1.getGenotypeFrequency().get(gen) != childfreq.get(gen)){
+                    if (!g1.getGenotypeFrequency().containsKey(gen) || g1.getGenotypeFrequency().get(gen) < childfreq.get(gen)){
                         improperFlag = true;
                         break;
                     }

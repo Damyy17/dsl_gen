@@ -16,8 +16,8 @@ public class DSLBoolean implements IDataType{
     }
 
     @Override
-    public void print() {
-        System.out.println(this.value);
+    public String print() {
+        return String.valueOf(this.value);
     }
 
     public boolean negate(){

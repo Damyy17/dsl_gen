@@ -203,56 +203,65 @@ public class Generation implements IDataType{
     }
 
     @Override
-    public void print() {
-        for (String[] row: square) {
-            for(String element : row) System.out.print("|" + element +"|");
-            System.out.println(" ");
-        }
+    public String print() {
+       return "";
     }
 
-    public void print(String field){
-        if (field.equals("square")) print();
-        else if (field.equals("genotype")){
+    public List<List<String>> printSquare(){
+        List<List<String>> square = new ArrayList<>();
+        for (String[] r: this.square) {
+            List<String> row = new ArrayList<>(Arrays.asList(r));
+            square.add(row);
+        }
+        return square;
+    }
+
+    public String print(String field) throws NonexistentFieldException {
+        StringBuilder s = new StringBuilder();
+        if (field.equals("genotype")){
             for (Parent p: this.children) {
-                p.print();
+                s.append(p.print());
             }
         }
         else if(field.equals("ancestors")){
             for (Parent p: this.parents) {
-                p.print();
+                s.append(p.print());
             }
         }
         else if (field.equals("frequency")) {
             if (this.genotypeFrequency.isEmpty()) estimateFreq();
-            System.out.println(this.genotypeFrequency);
+            s.append(this.genotypeFrequency);
         }
         else if (field.equals("phenotype")){
             for(Parent child : children){
-                System.out.println(child.getGenotype() + "-" + child.getPhenotype());
+                s.append(child.getGenotype()).append("-").append(child.getPhenotype());
             }
         }
-        else System.out.println( new NonexistentFieldException("Nonexistent Field Exception is occurred!").getMessage());
+        else throw new NonexistentFieldException("Nonexistent Field Exception is occurred!");
+        return s.toString();
     }
 
-    public void print(String field, String alpha) {
+    public String print(String field, String alpha) throws NonexistentFieldException {
+        StringBuilder s = new StringBuilder();
         switch (field) {
             case "frequency":
-                System.out.println(estimateFreq(alpha));
+                s.append(estimateFreq(alpha));
                 break;
             case "genotype":
                 for (Parent child : children) {
-                    if (child.getGenotype().contains(alpha)) child.print(field);
+                    if (child.getGenotype().contains(alpha)) s.append(child.print(field));
                 }
                 break;
             case "phenotype":
                 for (Parent child : children) {
                     if (child.getGenotype().contains(alpha))
-                        System.out.println(child.getGenotype() + " - " + child.getPhenotype());
+                        s.append(child.getGenotype()).append(" - ").append(child.getPhenotype());
                 }
                 break;
             default:
-                System.out.println( new NonexistentFieldException("Nonexistent Field Exception is occurred!").getMessage());
+                throw new NonexistentFieldException("Nonexistent Field Exception is occurred!");
         }
+        return s.toString();
     }
 
     public void setValue(String field, Parent[] value) throws SemanticExceptions {

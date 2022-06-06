@@ -88,15 +88,15 @@ public class Parent implements IDataType{
 
     //By default, prints "genotype - phenotype" or None if genotype not declared
     @Override
-    public void print() {
-        if (this.genotype.length() == 0) System.out.println("None");
-        System.out.println(this.genotype + " - " + this.phenotype);
+    public String print() {
+        if (this.genotype.length() == 0) return null;
+        return this.genotype + " - " + this.phenotype + "\n";
     }
 
-    public void print(String field){
-        if (field.equals("genotype")) System.out.println(this.genotype);
-        else if (field.equals("phenotype")) System.out.println(this.phenotype);
-        else System.out.println(new NonexistentFieldException("Nonexistent Field Exception is occurred!").getMessage());
+    public String print(String field) throws NonexistentFieldException {
+        if (field.equals("genotype")) return this.genotype;
+        else if (field.equals("phenotype")) return this.phenotype;
+        else throw new NonexistentFieldException("Nonexistent Field Exception is occurred!") ;
     }
 
 //    public void print(String field, String alpha){

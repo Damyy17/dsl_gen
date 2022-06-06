@@ -4,7 +4,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -14,11 +13,11 @@ public class Main {
         GenUI genUI = new GenUI();
         String input = genUI.getCodeText();
 
-        if (args.length == 0) {System.out.println("Please input code file");return;}
+        //if (args.length == 0) {System.out.println("Please input code file");return;}
         StringBuilder inputCode = new StringBuilder();
         try {
-            File myObj = new File(args[0]);
-            //File myObj = new File("C:\\Users\\Lina\\Documents\\dsl_gen\\src\\main\\java\\antlr\\code_test.txt");
+            //File myObj = new File(args[0]);
+            File myObj = new File("C:\\Users\\Lina\\Documents\\dsl_gen\\src\\main\\java\\antlr\\code_test.txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 inputCode.append(myReader.nextLine());
@@ -35,6 +34,7 @@ public class Main {
 
         ParseTree tree = parser.program();
         GeneticsGrammarBaseVisitor<String> visitor = new Visitor<>();
-        visitor.visit(tree);
+        String allOutputInfo = visitor.visit(tree);
+
     }
 }

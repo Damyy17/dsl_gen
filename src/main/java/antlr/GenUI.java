@@ -8,7 +8,6 @@ import javax.swing.text.Element;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Objects;
 
 public class GenUI extends JFrame{
     private JTextArea codeWrite;
@@ -20,6 +19,8 @@ public class GenUI extends JFrame{
     private JButton clearButton;
     private JTable table1;
     private JTextPane output;
+    //Added InputInfo object
+    private String inputInfo;
 
     public GenUI(){
         setFont(new Font("Monospaced", 12, Font.PLAIN));
@@ -104,6 +105,10 @@ public class GenUI extends JFrame{
 
     public String getCodeText(){
         return codeWrite.getText();
+    }
+
+    public void setOutputInfo(String inputInfo){
+        this.inputInfo = inputInfo;
     }
 
 }

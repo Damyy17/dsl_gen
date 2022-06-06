@@ -1958,11 +1958,7 @@ public class GeneticsGrammarParser extends Parser {
 			if ( visitor instanceof GeneticsGrammarVisitor ) {
 				try {
 					return ((GeneticsGrammarVisitor<? extends T>)visitor).visitIo(this);
-				} catch (UndeclaredVariableException e) {
-					e.printStackTrace();
-				} catch (NonexistentTypeException e) {
-					e.printStackTrace();
-				} catch (IncompatibleTypeException e) {
+				} catch (SemanticExceptions e) {
 					e.printStackTrace();
 				}
 			}

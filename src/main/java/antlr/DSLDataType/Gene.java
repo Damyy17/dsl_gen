@@ -65,16 +65,16 @@ public class Gene implements IDataType{
 
     //By default prints all information about labels. May be subject to change
     @Override
-    public void print() {
-        System.out.println(getLabels());
+    public String print() {
+        return getLabels().toString();
     }
 
-    public void print(String field) {
-        if (field.equals("location")) System.out.println(this.location);
-        else if(field.equals("labels")) System.out.println(this.labels);
-        else if (field.equals("dom")) System.out.println(this.dominantGene);
-        else if (field.equals("rec")) System.out.println(this.recessiveGene);
-        else System.out.println(new NonexistentFieldException("Nonexistent Field Exception is occurred!").getMessage());
+    public String print(String field) throws NonexistentFieldException {
+        if (field.equals("location")) return this.location;
+        else if(field.equals("labels")) return this.labels.toString();
+        else if (field.equals("dom")) return this.dominantGene;
+        else if (field.equals("rec")) return this.recessiveGene;
+        else throw new NonexistentFieldException("Nonexistent Field Exception is occurred!");
     }
 
     //Sets the value of the specific field or throws an NonexistentFieldException

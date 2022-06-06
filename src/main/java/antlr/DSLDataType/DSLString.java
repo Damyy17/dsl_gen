@@ -18,8 +18,8 @@ public class DSLString implements IDataType{
     }
 
     @Override
-    public void print() {
-        System.out.println(value);
+    public String print() {
+        return this.value;
     }
 
     @Override
