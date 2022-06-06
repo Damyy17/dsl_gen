@@ -105,7 +105,8 @@ public class Generation implements IDataType{
     }
 
     public int estimateFreq(String segment){
-        if (genotypeFrequency.isEmpty()) estimateFreq();
+        this.genotypeFrequency.clear();
+        estimateFreq();
         int i = 0;
         for (String gene: genotypeFrequency.keySet()) {
             if (gene.contains(segment)) i = i + genotypeFrequency.get(gene);
@@ -114,7 +115,8 @@ public class Generation implements IDataType{
     }
 
     public int estimateFreq(String segment, int population){
-        if (genotypeFrequency.isEmpty()) estimateFreq();
+        this.genotypeFrequency.clear();
+        estimateFreq();
         int total = children.size();
         Map<String, Integer> popfreq = new HashMap<>();
         for (String gene: genotypeFrequency.keySet()) {
@@ -145,6 +147,7 @@ public class Generation implements IDataType{
     }
 
     private void cross(){
+        this.children.clear();
         List<String> gam1 = generateGametes(this.parents[0].getGenotype());
         List<String> gam2 = generateGametes(this.parents[1].getGenotype());
         createSquare(gam1, gam2);

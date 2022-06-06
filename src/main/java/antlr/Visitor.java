@@ -178,6 +178,9 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                             e.printStackTrace();
                         }
                     }
+                    else if (temp.getType().equals("number") || temp.getType().equals("string")|| temp.getType().equals("bool")){
+                        temp.setValue(children.get(1), children.get(4));
+                    }
                 } else {
                     throw new UndeclaredVariableException("Undeclared variable exception. " + ctx.getText() + ". " + children.get(2) + " hasn't been declared.");
                 }

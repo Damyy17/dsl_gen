@@ -1,0 +1,24 @@
+genes a, b;
+parents child1,child2;
+generation g1;
+family fam1;
+string msg;
+dom: A -> a;
+dom: B -> b;
+
+set label A = "Hazel eyes";
+set label a = "Blue eyes";
+set label B = "Brown hair";
+set label b = "Blond hair";
+
+set genotype child1 = AaBb;
+set genotype child2 = Aabb;
+set genotype g1 = [child1,child2];
+set gen fam1 = pred g1;
+set value msg= "the possible parents are:";
+
+print msg;
+generation indiv;
+for indiv from fam1:
+  print indiv ancestors;
+end;
