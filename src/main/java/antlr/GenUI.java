@@ -154,27 +154,29 @@ public class GenUI extends JFrame{
                 String squares = allOutputInfo.substring(allOutputInfo.lastIndexOf("[") +1, allOutputInfo.lastIndexOf("]"));
                 String[] squarelist = squares.split("}");
                 List<String[]> data = new ArrayList<>();
-                for (String square: squarelist) {
-                    String s =square.substring(1);
-                    String[] rows = s.split("\\)");
-                    for (String row: rows) {
-                        String col = row.substring(1);
-                        String[] elements = col.split("\\|");
-                        data.add(elements);
+                if (!squarelist[0].equals("")) {
+                    for (String square : squarelist) {
+                        String s = square.substring(1);
+                        String[] rows = s.split("\\)");
+                        for (String row : rows) {
+                            String col = row.substring(1);
+                            String[] elements = col.split("\\|");
+                            data.add(elements);
+                        }
+
+                    }
+                    String[] columnNames = data.get(0);
+                    data.remove(0);
+                    String[][] pureData = new String[data.size()][columnNames.length];
+                    for (int i = 0; i < data.size(); i++) {
+                        pureData[i] = data.get(i);
                     }
 
+                    DefaultTableModel model = new DefaultTableModel(pureData, columnNames);
+                    table1.setModel(model);
+                    tableScroll.getViewport().add(table1);
+                    table1.setSize(300, 300);
                 }
-                String [] columnNames = data.get(0);
-                data.remove(0);
-                String[][] pureData = new String [data.size()][columnNames.length];
-                for (int i = 0; i < data.size(); i++) {
-                    pureData[i] = data.get(i);
-                }
-
-                DefaultTableModel model = new DefaultTableModel(pureData, columnNames);
-                table1.setModel(model);
-                tableScroll.getViewport().add(table1);
-                table1.setSize(300, 300);
             }
         });
 
