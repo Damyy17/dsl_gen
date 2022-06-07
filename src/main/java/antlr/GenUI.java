@@ -51,7 +51,7 @@ public class GenUI extends JFrame{
         //regular
         try {
             //create the font to use. Specify the size!
-            robotoR = Font.createFont(Font.TRUETYPE_FONT, new File("D:\\HW University\\Year2\\PBL_4\\dsl_gen\\src\\main\\resources\\fonts\\Roboto-Regular.ttf")).deriveFont(14f);
+            robotoR = Font.createFont(Font.TRUETYPE_FONT, new File("src//main//resources//fonts//Roboto-Regular.ttf")).deriveFont(14f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             //register the font
             ge.registerFont(robotoR);
@@ -63,7 +63,7 @@ public class GenUI extends JFrame{
         //bold
         try {
             //create the font to use. Specify the size!
-            robotoB = Font.createFont(Font.TRUETYPE_FONT, new File("D:\\HW University\\Year2\\PBL_4\\dsl_gen\\src\\main\\resources\\fonts\\Roboto-Bold.ttf")).deriveFont(14f);
+            robotoB = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/resources/fonts/Roboto-Bold.ttf")).deriveFont(14f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             //register the font
             ge.registerFont(robotoB);
@@ -182,29 +182,30 @@ public class GenUI extends JFrame{
                 //sqaures of the program
                 String squares = allOutputInfo.substring(allOutputInfo.lastIndexOf("[") +1, allOutputInfo.lastIndexOf("]"));
                 String[] squarelist = squares.split("}");
-                if (squarelist[0].equals("")) System.out.println("No maidens");
-                List<String[]> data = new ArrayList<>();
-                for (String square: squarelist) {
-                    String s =square.substring(1);
-                    String[] rows = s.split("\\)");
-                    for (String row: rows) {
-                        String col = row.substring(1);
-                        String[] elements = col.split("\\|");
-                        data.add(elements);
+                if (!squarelist[0].equals("")) {
+                    List<String[]> data = new ArrayList<>();
+                    for (String square : squarelist) {
+                        String s = square.substring(1);
+                        String[] rows = s.split("\\)");
+                        for (String row : rows) {
+                            String col = row.substring(1);
+                            String[] elements = col.split("\\|");
+                            data.add(elements);
+                        }
+
+                    }
+                    String[] columnNames = data.get(0);
+                    data.remove(0);
+                    String[][] pureData = new String[data.size()][columnNames.length];
+                    for (int i = 0; i < data.size(); i++) {
+                        pureData[i] = data.get(i);
                     }
 
+                    DefaultTableModel model = new DefaultTableModel(pureData, columnNames);
+                    table1.setModel(model);
+                    tableScroll.getViewport().add(table1);
+                    table1.setSize(300, 300);
                 }
-                String [] columnNames = data.get(0);
-                data.remove(0);
-                String[][] pureData = new String [data.size()][columnNames.length];
-                for (int i = 0; i < data.size(); i++) {
-                    pureData[i] = data.get(i);
-                }
-
-                DefaultTableModel model = new DefaultTableModel(pureData, columnNames);
-                table1.setModel(model);
-                tableScroll.getViewport().add(table1);
-                table1.setSize(300, 300);
             }
         });
 
