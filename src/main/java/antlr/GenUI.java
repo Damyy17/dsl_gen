@@ -15,8 +15,6 @@ import javax.swing.text.Element;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +33,6 @@ public class GenUI extends JFrame{
     private JScrollPane tableScroll;
     //Added InputInfo object
     private String inputInfo;
-    Font robotoR;
-    Font robotoB;
 
     public GenUI(){
         setFont(new Font("Monospaced", 12, Font.PLAIN));
@@ -47,66 +43,41 @@ public class GenUI extends JFrame{
         setSize(800, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        //roboto custom fonts
-        //regular
-        try {
-            //create the font to use. Specify the size!
-            robotoR = Font.createFont(Font.TRUETYPE_FONT, new File("src//main//resources//fonts//Roboto-Regular.ttf")).deriveFont(14f);
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            //register the font
-            ge.registerFont(robotoR);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch(FontFormatException e) {
-            e.printStackTrace();
-        }
-        //bold
-        try {
-            //create the font to use. Specify the size!
-            robotoB = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/resources/fonts/Roboto-Bold.ttf")).deriveFont(14f);
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            //register the font
-            ge.registerFont(robotoB);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch(FontFormatException e) {
-            e.printStackTrace();
-        }
 
         //font and colors
         codeWrite.setBackground(new Color(36, 36, 36));
-        codeWrite.setFont(robotoR);
+        codeWrite.setFont(new Font("Monospaced", Font.PLAIN,12));
         codeWrite.setForeground(new Color(255,255,255));
 
         output.setBackground(new Color(36, 36, 36));
         output.setForeground(new Color(30, 215, 96));
-        output.setFont(robotoR);
+        output.setFont(new Font("Monospaced", Font.PLAIN,14));
         outputName.setForeground(new Color(30, 215, 96));
-        outputName.setFont(robotoB);
+        outputName.setFont(new Font("Monospaced", Font.BOLD, 14));
 
         punnet.setForeground( new Color(30, 215, 96));
-        punnet.setFont(robotoB);
+        punnet.setFont(new Font("Monospaced", Font.BOLD,14));
         punnet.setText("Punnet Square");
 
         table1.setBackground(new Color(36, 36, 36));
         table1.setForeground(new Color(255,255,255));
-        table1.setFont(robotoR);
+        table1.setFont(new Font("Monospaced", Font.BOLD, 14));
         table1.setRowHeight(30);
         table1.setGridColor(new Color(30, 215, 96));
         JTableHeader header = table1.getTableHeader();
         header.setBackground(new Color(36, 36, 36));
         header.setForeground(new Color(255,255,255));
-        header.setFont(robotoR);
+        header.setFont(new Font("Monospaced", Font.BOLD, 14));
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment( JLabel.CENTER );
         table1.setDefaultRenderer(String.class, centerRenderer);
 
         runButton.setBackground(new Color(30, 215, 96));
         runButton.setForeground(new Color(36, 36, 36));
-        runButton.setFont(robotoB);
+        runButton.setFont(new Font("Monospaced", Font.BOLD, 14));
         clearButton.setBackground(new Color(30, 215, 96));
         clearButton.setForeground(new Color(36, 36, 36));
-        clearButton.setFont(robotoB);
+        clearButton.setFont(new Font("Monospaced", Font.BOLD, 14));
         //
 
         //line numbering
@@ -114,7 +85,7 @@ public class GenUI extends JFrame{
         lines.setBackground(new Color(36, 36, 36));
         lines.setForeground(new Color(30, 215, 96));
         lines.setEditable(false);
-        lines.setFont(robotoR);
+        lines.setFont(new Font("Monospaced", Font.PLAIN, 14));
 //        lines.setFont(new Font("Monospaced", 12, Font.PLAIN));
 
         //code section
@@ -182,30 +153,28 @@ public class GenUI extends JFrame{
                 //sqaures of the program
                 String squares = allOutputInfo.substring(allOutputInfo.lastIndexOf("[") +1, allOutputInfo.lastIndexOf("]"));
                 String[] squarelist = squares.split("}");
-                if (!squarelist[0].equals("")) {
-                    List<String[]> data = new ArrayList<>();
-                    for (String square : squarelist) {
-                        String s = square.substring(1);
-                        String[] rows = s.split("\\)");
-                        for (String row : rows) {
-                            String col = row.substring(1);
-                            String[] elements = col.split("\\|");
-                            data.add(elements);
-                        }
-
-                    }
-                    String[] columnNames = data.get(0);
-                    data.remove(0);
-                    String[][] pureData = new String[data.size()][columnNames.length];
-                    for (int i = 0; i < data.size(); i++) {
-                        pureData[i] = data.get(i);
+                List<String[]> data = new ArrayList<>();
+                for (String square: squarelist) {
+                    String s =square.substring(1);
+                    String[] rows = s.split("\\)");
+                    for (String row: rows) {
+                        String col = row.substring(1);
+                        String[] elements = col.split("\\|");
+                        data.add(elements);
                     }
 
-                    DefaultTableModel model = new DefaultTableModel(pureData, columnNames);
-                    table1.setModel(model);
-                    tableScroll.getViewport().add(table1);
-                    table1.setSize(300, 300);
                 }
+                String [] columnNames = data.get(0);
+                data.remove(0);
+                String[][] pureData = new String [data.size()][columnNames.length];
+                for (int i = 0; i < data.size(); i++) {
+                    pureData[i] = data.get(i);
+                }
+
+                DefaultTableModel model = new DefaultTableModel(pureData, columnNames);
+                table1.setModel(model);
+                tableScroll.getViewport().add(table1);
+                table1.setSize(300, 300);
             }
         });
 
