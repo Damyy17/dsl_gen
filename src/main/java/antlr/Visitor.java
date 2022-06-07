@@ -22,7 +22,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
     }
 
     public T visitProgram(GeneticsGrammarParser.ProgramContext ctx){
-        InputInfo inputInfo = new InputInfo();
+        inputInfo = new InputInfo();
         visitChildren(ctx);
         return (T) inputInfo.getAllOutput();
     }

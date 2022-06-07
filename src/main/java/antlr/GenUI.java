@@ -1,8 +1,16 @@
 package antlr;
 
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+
 import javax.swing.*;
+import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.Element;
 import java.awt.*;
@@ -19,6 +27,8 @@ public class GenUI extends JFrame{
     private JButton clearButton;
     private JTable table1;
     private JTextPane output;
+    private JLabel outputName;
+    private JScrollPane scrollTxt;
     //Added InputInfo object
     private String inputInfo;
 
@@ -26,13 +36,43 @@ public class GenUI extends JFrame{
         setFont(new Font("Monospaced", 12, Font.PLAIN));
         setTitle("Genetics DSL");
         setContentPane(GenPanel);
+        GenPanel.setBackground(new Color(36, 36, 36));
         setVisible(true);
         setSize(800, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        //font and colors
+        codeWrite.setBackground(new Color(36, 36, 36));
+        codeWrite.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        codeWrite.setForeground(new Color(255,255,255));
+
+        output.setBackground(new Color(36, 36, 36));
+        output.setForeground(new Color(30, 215, 96));
+        output.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        outputName.setForeground(new Color(30, 215, 96));
+        outputName.setFont(new Font("Monospaced", Font.BOLD, 14));
+
+        punnet.setForeground( new Color(30, 215, 96));
+
+        table1.setBackground(new Color(36, 36, 36));
+        table1.setForeground(new Color(255,255,255));
+        table1.setFont(new Font("Monospaced", Font.BOLD, 12));
+        table1.setRowHeight(30);
+        table1.setGridColor(new Color(30, 215, 96));
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+        table1.setDefaultRenderer(String.class, centerRenderer);
+
+        runButton.setBackground(new Color(30, 215, 96));
+        runButton.setForeground(new Color(36, 36, 36));
+        clearButton.setBackground(new Color(30, 215, 96));
+        clearButton.setForeground(new Color(36, 36, 36));
+        //
+
         //line numbering
         lines = new JTextArea("1");
-        lines.setBackground(Color.LIGHT_GRAY);
+        lines.setBackground(new Color(36, 36, 36));
+        lines.setForeground(new Color(30, 215, 96));
         lines.setEditable(false);
 //        lines.setFont(new Font("Monospaced", 12, Font.PLAIN));
 
@@ -80,7 +120,24 @@ public class GenUI extends JFrame{
         runButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                codeWrite.setText(codeWrite.getText());
+                CharStream codeExample = CharStreams.fromString(String.valueOf(codeWrite.getText()));
+                GeneticsGrammarLexer lexer = new GeneticsGrammarLexer(codeExample);
+                GeneticsGrammarParser parser = new GeneticsGrammarParser(new CommonTokenStream(lexer));
 
+                ParseTree tree = parser.program();
+                GeneticsGrammarBaseVisitor<String> visitor = new Visitor<>();
+                String allOutputInfo = visitor.visit(tree);
+//                System.out.println(allOutputInfo);
+
+                //output of the program
+                String output1 = allOutputInfo.substring(allOutputInfo.indexOf("[")+1, allOutputInfo.indexOf("]"));
+                String[] outputs = output1.split("\\|");
+                StringBuilder finalOutput = new StringBuilder();
+                for (String word : outputs){
+                    finalOutput.append(word);
+                }
+                output.setText(finalOutput.toString());
             }
         });
 
@@ -94,12 +151,16 @@ public class GenUI extends JFrame{
                 {"ab", "AaBb", "aaBb", "Aabb", "aabb"}
         };
         String[] columnNames = {"F/M", "AB", "aB", "Ab", "ab"};
+
         DefaultTableModel model = new DefaultTableModel(data, columnNames);
+        table1.setSize(300, 300);
         table1.setModel(model);
         table1.setEnabled(false);
-        output.setText("aabb - \"Blue eyes\" \"Blond hair\"\n" +
-                "100.0\n" +
-                "8");
+
+        output.setText("");
+        output.setEditable(false);
+        scrollTxt.getViewport().add(output);
+        scrollTxt.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
     }
 
