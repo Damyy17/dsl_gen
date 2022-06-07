@@ -143,6 +143,7 @@ public class GenUI extends JFrame{
                 //sqaures of the program
                 String squares = allOutputInfo.substring(allOutputInfo.lastIndexOf("[") +1, allOutputInfo.lastIndexOf("]"));
                 String[] squarelist = squares.split("}");
+                if (squarelist[0].equals("")) System.out.println("No maidens");
                 List<String[]> data = new ArrayList<>();
                 for (String square: squarelist) {
                     String s =square.substring(1);

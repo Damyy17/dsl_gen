@@ -22,6 +22,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
     }
 
     public T visitProgram(GeneticsGrammarParser.ProgramContext ctx){
+        Map<String, IDataType> variables = new HashMap<>();
         parentAssignedFlag = false;
         inputInfo = new InputInfo();
         visitChildren(ctx);
@@ -166,7 +167,9 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                     }
                     else if(temp.getType().equals("generation")){
                         try {
-                            temp = (Generation) visitArray(ctx.expresion().array(), "parent");
+                            Generation gen1 = (Generation) temp;
+                            Generation nextg = (Generation) visitArray(ctx.expresion().array(), "parent");
+                            variables.put(children.get(2).toLowerCase(), nextg);
                         } catch (SemanticExceptions e) {
                             e.printStackTrace();
                         }
@@ -278,6 +281,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
                 if (!field.equals("gen")) throw new InaccessibleFieldException("Inaccessible Field Exception is occured. " + ctx.getText() + ". " );
                 if(ctx.id().size() != 0) {
                 Family fam2 = (Family) variables.get(var.toLowerCase());
+                    System.out.println(children.get(1));
                 Generation tmpgen = (Generation) variables.get(children.get(1).toLowerCase());
                     try {
                         fam2.pred(tmpgen.getChildren());
@@ -315,11 +319,11 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
             children.add(e.getText());
         }
         children = Arrays.asList(children.get(1).split(","));
-
         if (type.equals("parent")){
             List<Parent> genotype = new ArrayList<>();
             for (String var: children) {
-                if (variables.containsKey(var.toLowerCase())) genotype.add((Parent) variables.get(var.toLowerCase()));
+                if (variables.containsKey(var.toLowerCase())) {genotype.add((Parent) variables.get(var.toLowerCase()));
+                    }
                 else {
                     Parent tmp = new Parent();
                     //If the genes havent been linked to the parent, links them
