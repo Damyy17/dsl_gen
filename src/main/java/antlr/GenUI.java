@@ -6,16 +6,17 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import javax.swing.*;
-import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.plaf.FontUIResource;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.Element;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class GenUI extends JFrame{
     private JTextArea codeWrite;
@@ -138,6 +139,27 @@ public class GenUI extends JFrame{
                     finalOutput.append(word);
                 }
                 output.setText(finalOutput.toString());
+
+                //sqaures of the program
+                String squares = allOutputInfo.substring(allOutputInfo.lastIndexOf("[") +1, allOutputInfo.lastIndexOf("]"));
+                String[] squarelist = squares.split("}");
+                List<String[]> data = new ArrayList<>();
+                for (String square: squarelist) {
+                    String s =square.substring(1);
+                    String[] rows = s.split("\\)");
+                    for (String row: rows) {
+                        String col = row.substring(1);
+                        String[] elements = col.split("\\|");
+                        data.add(elements);
+                    }
+
+                }
+                String [] columnNames = data.get(0);
+                data.remove(0);
+                String[][] pureData = new String [data.size()][columnNames.length];
+                for (int i = 0; i < data.size(); i++) {
+                    pureData[i] = data.get(i);
+                }
             }
         });
 

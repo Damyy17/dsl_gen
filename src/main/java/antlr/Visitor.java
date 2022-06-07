@@ -22,6 +22,7 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
     }
 
     public T visitProgram(GeneticsGrammarParser.ProgramContext ctx){
+        parentAssignedFlag = false;
         inputInfo = new InputInfo();
         visitChildren(ctx);
         return (T) inputInfo.getAllOutput();
