@@ -2,6 +2,10 @@ package antlr;
 
 import antlr.DSLDataType.*;
 import antlr.DSLExceptions.*;
+import antlr.Strategy.EvaluationBoolStrategy;
+import antlr.Strategy.EvaluationNumbersStrategy;
+import antlr.Strategy.EvaluationStrategy;
+import antlr.Strategy.EvaluationStringStrategy;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 
@@ -509,57 +513,62 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
 
     public T evaluateExpression(List<String> children) throws SemanticExceptions {
         DSLBoolean a = new DSLBoolean();
+        EvaluationStrategy strateg;
         if (children.size() == 3){
             if (variables.containsKey(children.get(0).toLowerCase())){
                 switch (variables.get(children.get(0).toLowerCase()).getType()){
                     case "number":
+                        strateg = new EvaluationNumbersStrategy();
                         DSLNumber firstn = (DSLNumber) variables.get(children.get(0).toLowerCase());
                         if (variables.containsKey(children.get(2).toLowerCase()) &&
                                 variables.get(children.get(2).toLowerCase()).getType().equals("number")){
                             DSLNumber secondn = (DSLNumber) variables.get(children.get(0).toLowerCase());
-                            a.setValue("value",evaluateNumbers(firstn.getValue(), secondn.getValue(), children.get(1)));
+                            a.setValue("value",strateg.eval(firstn.getValue(), secondn.getValue(), children.get(1)));
                         } else
                             try {
-                                a.setValue("value", evaluateNumbers(firstn.getValue(), Double.parseDouble(children.get(2)), children.get(1)));
+                                a.setValue("value", strateg.eval(firstn.getValue(), Double.parseDouble(children.get(2)), children.get(1)));
                             } catch (Exception e) {
                                 throw new IncompatibleTypeException("Incompatible Type Exception is occured! " +  children.get(2) + " is not comparable to " + children.get(0));
                             }
                             break;
                     case "boolean":
+                        strateg = new EvaluationBoolStrategy();
                         DSLBoolean firstb = (DSLBoolean) variables.get(children.get(0).toLowerCase());
                         if (variables.containsKey(children.get(2).toLowerCase()) &&
                                 variables.get(children.get(2).toLowerCase()).getType().equals("boolean")){
                             DSLBoolean secondb = (DSLBoolean) variables.get(children.get(0).toLowerCase());
-                            a.setValue("value", evaluateBool(firstb.getValue(), secondb.getValue(), children.get(1)));
+                            a.setValue("value", strateg.eval(firstb.getValue(), secondb.getValue(), children.get(1)));
                         } else
                             try {
-                                a.setValue("value", evaluateBool(firstb.getValue(), Boolean.parseBoolean(children.get(2)), children.get(1)));
+                                a.setValue("value", strateg.eval(firstb.getValue(), Boolean.parseBoolean(children.get(2)), children.get(1)));
                             } catch (Exception e) {
                                 throw new IncompatibleTypeException("Incompatible Type Exception is occured! " + children.get(2) + " is not comparable to " + children.get(0));
                             }
                             break;
                     case "string":
+                        strateg = new EvaluationStringStrategy();
                         DSLString firsts = (DSLString) variables.get(children.get(0).toLowerCase());
                         if (variables.containsKey(children.get(2).toLowerCase()) &&
                                 variables.get(children.get(2).toLowerCase()).getType().equals("string")){
                             DSLString seconds = (DSLString) variables.get(children.get(0).toLowerCase());
-                            a.setValue("value", evaluateString(firsts.getValue(), seconds.getValue(), children.get(1)));
+                            a.setValue("value", strateg.eval(firsts.getValue(), seconds.getValue(), children.get(1)));
                         } else
                             try {
-                                a.setValue("value", evaluateString(firsts.getValue(), children.get(2), children.get(1)));
+                                a.setValue("value", strateg.eval(firsts.getValue(), children.get(2), children.get(1)));
                             } catch (Exception e) {
                                 throw new IncompatibleTypeException("Incompatible Type Exception is occured! " + children.get(2) + " is not comparable to " + children.get(0));
                             }
                         break;
                     case "parent":
+                        strateg = new EvaluationNumbersStrategy();
                         Parent firstp = (Parent) variables.get(children.get(0).toLowerCase());
                         if (variables.containsKey(children.get(2).toLowerCase()) &&
                                 variables.get(children.get(2).toLowerCase()).getType().equals("parent")){
                             Parent secondp = (Parent) variables.get(children.get(0).toLowerCase());
-                            a.setValue("value", evaluateString(firstp.getGenotype(), secondp.getGenotype(), children.get(1)));
+                            a.setValue("value", strateg.eval(firstp.getGenotype(), secondp.getGenotype(), children.get(1)));
                         } else
                             try {
-                                a.setValue("value", evaluateString(firstp.getGenotype(), children.get(2), children.get(1)));
+                                a.setValue("value", strateg.eval(firstp.getGenotype(), children.get(2), children.get(1)));
                             } catch (Exception e) {
                                 throw new IncompatibleTypeException("Incompatible Type Exception is occured! " + children.get(2) + " is not comparable to " + children.get(0));
                             }
@@ -579,63 +588,5 @@ public class Visitor<T> extends GeneticsGrammarBaseVisitor<T>{
         }
 
         return (T) a;
-    }
-
-    private String evaluateString(String value1, String value2, String sign) throws IncompatibleTypeException {
-    switch (sign){
-        case "==":
-            if(value1.equals( value2)) return "true";
-            else return "false";
-        case "!=":
-            if(!value1.equals( value2)) return "true";
-            else return "false";
-        default:
-            throw new IncompatibleTypeException("Incompatible Type Exception is occured! " + value1 + " and " + value2 + " can't be compared through " + sign);
-    }
-    }
-
-    private String evaluateBool(boolean value1, boolean value2, String sign) throws IncompatibleTypeException {
-        switch (sign){
-            case "and":
-                if(value1 && value2) return "true";
-                else return "false";
-            case "or":
-                if(value1 || value2) return "true";
-                else return "false";
-            case "==":
-                if(value1 == value2) return "true";
-                else return "false";
-            case "!=":
-                if(value1 != value2) return "true";
-                else return "false";
-            default:
-                throw new IncompatibleTypeException("Incompatible Type Exception is occured! " + value1 + " and " + value2 + " can't be compared through " + sign);
-        }
-    }
-
-    private String evaluateNumbers(double value1, double value2, String sign) throws IncompatibleTypeException {
-        switch (sign){
-            case ">":
-                if(value1 > value2) return "true";
-                else return "false";
-            case "<":
-                if(value1 < value2) return "true";
-                else return "false";
-
-            case "<=":
-                if(value1 <= value2) return "true";
-                else return "false";
-            case ">=":
-                if(value1 >= value2) return "true";
-                else return "false";
-            case "==":
-                if(value1 == value2) return "true";
-                else return "false";
-            case "!=":
-                if(value1 != value2) return "true";
-                else return "false";
-            default:
-                throw new IncompatibleTypeException("Incompatible Type Exception is occured! " + value1 + " and " + value2 + " can't be compared through " + sign);
-        }
     }
 }

@@ -44,6 +44,7 @@ public class GenUI extends JFrame{
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 
+
         //font and colors
         codeWrite.setBackground(new Color(36, 36, 36));
         codeWrite.setFont(new Font("Monospaced", Font.PLAIN,12));
